@@ -5,11 +5,15 @@ class Map {
 
 public:
 
+    static const int MAP_X = 20;
+    static const int MAP_Y = 25;
+
     Map();
     ~Map();
 
-    void LoadMap(int arr[20][25]);
+    void LoadMap(int arr[MAP_X][MAP_Y]);
     void DrawMap();
+    void DrawMap(int camx, int camy);
 
 private: 
 
@@ -17,6 +21,6 @@ private:
     SDL_Texture* dirt;
     SDL_Texture* grass;
 
-    int map[20][25];
+    int map[MAP_X][MAP_Y];
 
 };

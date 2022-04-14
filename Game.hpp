@@ -26,6 +26,8 @@ public:
     int cnt;
 
     static SDL_Renderer *gRenderer;
+    static SDL_Rect gCamera;
+
 
 private: 
 

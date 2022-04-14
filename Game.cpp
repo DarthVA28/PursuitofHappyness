@@ -3,7 +3,6 @@
 #include "Object.hpp"
 #include "Map.hpp"
 
-SDL_Texture* player1tex;
 SDL_Rect srcR, destR;
 
 enum KeyPressSurfaces
@@ -20,6 +19,7 @@ Object* player;
 Object* player2;
 Map* map;
 
+SDL_Rect Game::gCamera = {0,0,800,600};
 SDL_Renderer* Game::gRenderer = nullptr;
 
 Game::Game() {}
@@ -71,7 +71,7 @@ void Game::init(const char* win_title, int xpos, int ypos, int h, int w, bool fs
         isRunning = false;
     }
 
-    player = new Object("assets/p1.png", 0,0);
+    player = new Object("assets/p1.png", 400,300);
     player2 = new Object("assets/p2.png", 128,128);
     map = new Map(); 
 }
@@ -112,7 +112,7 @@ void Game::handleEvent()  {
             }
             break; 
         }
-        
+
         default:
             break;
     }
@@ -122,13 +122,31 @@ void Game::handleEvent()  {
 void Game::update() {
     player->objUpdate();
     player2->objUpdate();
+
+    gCamera.x = (player->getx()-400);
+    gCamera.y = (player->gety()-300);
+
+    // if( gCamera.x < 0 ) { 
+    //     gCamera.x = 0;
+    // }
+    // if( gCamera.y < 0 ) {
+    //     gCamera.y = 0;
+    // }
+    // if( gCamera.x > 32*(map->MAP_X) - gCamera.w ){
+    //     gCamera.x = (map->MAP_X) - gCamera.w;
+    // }
+    // if( gCamera.y > 32*(map->MAP_Y) - gCamera.h ) {
+    //     gCamera.y = (map->MAP_Y) - gCamera.h;
+    // }
+
 }
 
 void Game::render() {
     SDL_RenderClear(gRenderer);
-    map->DrawMap();
-    player->objRender();
-    player2->objRender();
+    map->DrawMap(gCamera.x, gCamera.y);
+    player->objRender(gCamera.x, gCamera.y);
+    // player->objRender();
+    player2->objRender(gCamera.x, gCamera.y);
     SDL_RenderPresent(gRenderer);
 }
 

@@ -1,7 +1,7 @@
 #include "Map.hpp"
 #include "TM.hpp"
 
-int map1[20][25] = { 0 };
+int map1[Map::MAP_X][Map::MAP_Y] = { 0 };
 
 Map::Map() {
     dirt = TM::LoadTexture("assets/dirt.png");
@@ -27,6 +27,29 @@ void Map::DrawMap(){
             
             dest.x = 32*j;
             dest.y = 32*i;
+
+            type = map[i][j];
+            switch(type) {
+                case 0: 
+                    TM::Draw(dirt,src,dest);
+                    break;
+                case 1: 
+                    TM::Draw(grass,src,dest);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+void Map::DrawMap(int camx, int camy){
+    int type = 0;
+    for (int i=0; i<20; i++) {
+        for (int j=0; j<25; j++) {
+            
+            dest.x = 32*j - camx;
+            dest.y = 32*i - camy;
 
             type = map[i][j];
             switch(type) {

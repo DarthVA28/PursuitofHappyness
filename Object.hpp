@@ -9,9 +9,12 @@ public:
 
     void objUpdate();
     void objRender();
+    void objRender(int camx, int camy);
     void objMove(int dir);
     void objMove(int dir, SDL_Rect b);
     bool checkCollision(SDL_Rect b);
+    int getx();
+    int gety();
     SDL_Rect getCollider();
 
 private:

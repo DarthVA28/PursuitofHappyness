@@ -131,6 +131,14 @@ void Object::objRender() {
     SDL_RenderCopy(renderer,objTexture,&srcRect,&destRect);
 }
 
+void Object::objRender(int camx, int camy) {
+    destRect.x = xpos - Game::gCamera.x;
+    destRect.y = ypos - Game::gCamera.y;
+    destRect.w = 2*srcRect.w;
+    destRect.h = 2*srcRect.h;
+    SDL_RenderCopy(renderer,objTexture,&srcRect,&destRect);
+}
+
 bool Object::checkCollision(SDL_Rect b) {
         //The sides of the rectangles
         int leftA, leftB;
@@ -167,4 +175,12 @@ bool Object::checkCollision(SDL_Rect b) {
 
 SDL_Rect Object::getCollider() {
     return mCollider;
+}
+
+int Object::getx() {
+    return xpos;
+}
+
+int Object::gety() {
+    return ypos;
 }
