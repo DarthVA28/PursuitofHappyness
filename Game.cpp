@@ -2,6 +2,7 @@
 #include "TM.hpp"
 #include "Object.hpp"
 #include "Map.hpp"
+#include "Tuple.hpp"
 
 SDL_Rect srcR, destR;
 
@@ -71,7 +72,7 @@ void Game::init(const char* win_title, int xpos, int ypos, int h, int w, bool fs
         isRunning = false;
     }
 
-    player = new Object("assets/p1.png", 400,300);
+    player = new Object("assets/p1.png", 12376,2048);
     player2 = new Object("assets/p2.png", 128,128);
     map = new Map(); 
 }
@@ -92,19 +93,19 @@ void Game::handleEvent()  {
             SDL_Rect b = (player2->getCollider());
             switch( e.key.keysym.sym ) {
                 case SDLK_UP:
-                    player->objMove(KEY_PRESS_SURFACE_UP,b);
+                    player->objMove(KEY_PRESS_SURFACE_UP,b,map->Colliders);
                     break;
 
                 case SDLK_DOWN:
-                    player->objMove(KEY_PRESS_SURFACE_DOWN,b);
+                    player->objMove(KEY_PRESS_SURFACE_DOWN,b,map->Colliders);
                     break;
 
                 case SDLK_LEFT:
-                    player->objMove(KEY_PRESS_SURFACE_LEFT,b);
+                    player->objMove(KEY_PRESS_SURFACE_LEFT,b,map->Colliders);
                     break;
 
                 case SDLK_RIGHT:
-                    player->objMove(KEY_PRESS_SURFACE_RIGHT,b);
+                    player->objMove(KEY_PRESS_SURFACE_RIGHT,b,map->Colliders);
                     break;
 
                 default:
@@ -116,7 +117,6 @@ void Game::handleEvent()  {
         default:
             break;
     }
-
 }
 
 void Game::update() {
