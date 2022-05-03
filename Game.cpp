@@ -350,6 +350,9 @@ void LButton::render()
 	
 	
 }
+
+
+//------------------------------------------------------------------------------- MUSIC---------------------------------------------------------------------------------------------
 LTexture gPromptTexture;
 
 bool loadMusicMedia()
@@ -433,6 +436,7 @@ bool loadMusicMedia()
     SDL_Quit();
 } */
 
+//-----------------------------------START SCREEN---------------------------------------------
 bool loadMedia()
 {
 	//Loading success flag
@@ -526,7 +530,11 @@ void Game::init(const char* win_title, int xpos, int ypos, int h, int w, bool fs
 	}
 	
 	else
-	{	
+	{	//Set texture filtering to linear
+		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
+		{
+			printf( "Warning: Linear texture filtering not enabled!" );
+		}
 		//Create window
 		gWindow = SDL_CreateWindow(win_title, xpos, ypos, h, w, flags);
 		if( gWindow == NULL )
@@ -543,7 +551,15 @@ void Game::init(const char* win_title, int xpos, int ypos, int h, int w, bool fs
 			if  (gRenderer == NULL) {
 					printf( "Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
 					success = false;
-			} else 
+			} 
+			 //Initialize SDL_mixer
+			if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+			{
+				printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+				success = false;
+			}
+			
+			else 
 			{
 			if( !loadMedia() )
 		{
@@ -596,6 +612,49 @@ void Game::handleEvent()  {
 		{
 			quit = true;
 		}
+		else if( e.type == SDL_KEYDOWN )
+					{
+						switch( e.key.keysym.sym )
+						{//Play high sound effect
+							case SDLK_1:
+							Mix_PlayChannel( -1, gHigh, 0 );
+							break;
+							
+							//Play medium sound effect
+							case SDLK_2:
+							Mix_PlayChannel( -1, gMedium, 0 );
+							break;
+						case SDLK_9:
+							//If there is no music playing
+							if( Mix_PlayingMusic() == 0 )
+							{
+								//Play the music
+								Mix_PlayMusic( gMusic, -1 );
+							}
+							//If music is being played
+							else
+							{
+								//If the music is paused
+								if( Mix_PausedMusic() == 1 )
+								{
+									//Resume the music
+									Mix_ResumeMusic();
+								}
+								//If the music is playing
+								else
+								{
+									//Pause the music
+									Mix_PauseMusic();
+								}
+							}
+							break;
+							
+							case SDLK_0:
+							//Stop the music
+							Mix_HaltMusic();
+							break;
+						}
+					}
 		
 		//Handle button events
 		for( int i = 0; i < TOTAL_BUTTONS; ++i )
@@ -649,6 +708,15 @@ void Game::handleEvent()  {
                 case SDLK_RIGHT:
                     player->objMove(KEY_PRESS_SURFACE_RIGHT,b,map->Colliders);
                     break;
+//Play high sound effect
+		case SDLK_1:
+		Mix_PlayChannel( -1, gHigh, 0 );
+		break;
+		
+		//Play medium sound effect
+		case SDLK_2:
+		Mix_PlayChannel( -1, gMedium, 0 );
+		break;
 		 case SDLK_9:
                             //If there is no music playing
                             if( Mix_PlayingMusic() == 0 )
