@@ -3,7 +3,9 @@
 #include "Object.hpp"
 #include <vector>
 #include "Tuple.hpp"
+#include <string>
 using std::vector;
+using std::string;
 
 class Map {
 
@@ -21,6 +23,8 @@ public:
     void DrawMap(int camx, int camy);
     void setColliders();
     void Collisions(int camx, int camy, Object* player);
+
+    static string getRegion(int x, int y);
 
 private: 
 

@@ -165,9 +165,10 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
     mCollider.w = 2*srcRect.w;
     mCollider.h = 2*srcRect.h;
 
+    // cout << Map::getRegion(xpos,ypos) << endl;
+
     cout << "COORDINATES:" << endl;
-    cout << "X:" << xpos << endl;
-    cout << "Y:" << ypos << endl;
+    cout << xpos << ", " << ypos << endl;
 }
 
 void Object::objMove(int dir) {
