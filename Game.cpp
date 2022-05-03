@@ -3,16 +3,16 @@
 #include "Object.hpp"
 #include "Map.hpp"
 #include "Tuple.hpp"
-#include <SDL2/SDL_mixer.h>
+// #include <SDL2/SDL_mixer.h>
 
 
-Mix_Music *gMusic = nullptr;
+// Mix_Music *gMusic = nullptr;
 
-//The sound effects that will be used
-Mix_Chunk *gScratch = NULL;
-Mix_Chunk *gHigh = NULL;
-Mix_Chunk *gMedium = NULL;
-Mix_Chunk *gLow = NULL;
+// //The sound effects that will be used
+// Mix_Chunk *gScratch = NULL;
+// Mix_Chunk *gHigh = NULL;
+// Mix_Chunk *gMedium = NULL;
+// Mix_Chunk *gLow = NULL;
 
 
 //Screen dimension constants
@@ -355,55 +355,55 @@ void LButton::render()
 //------------------------------------------------------------------------------- MUSIC---------------------------------------------------------------------------------------------
 LTexture gPromptTexture;
 
-bool loadMusicMedia()
-{
-	//Loading success flag
-	bool success = true;
+// bool loadMusicMedia()
+// {
+// 	//Loading success flag
+// 	bool success = true;
 
-	//Load prompt texture
+// 	//Load prompt texture
 
 
-	//Load music
-	gMusic = Mix_LoadMUS( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/beat.wav" );
-	if( gMusic == NULL )
-	{
-		printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
-		success = false;
-	}
+// 	//Load music
+// 	gMusic = Mix_LoadMUS( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/beat.wav" );
+// 	if( gMusic == NULL )
+// 	{
+// 		printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+// 		success = false;
+// 	}
 	
-	//Load sound effects
-	gScratch = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/scratch.wav" );
-	if( gScratch == NULL )
-	{
-		printf( "Failed to load scratch sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
-		success = false;
-	}
+// 	//Load sound effects
+// 	gScratch = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/scratch.wav" );
+// 	if( gScratch == NULL )
+// 	{
+// 		printf( "Failed to load scratch sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+// 		success = false;
+// 	}
 	
-	gHigh = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/high.wav" );
-	if( gHigh == NULL )
-	{
-		printf( "Failed to load high sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
-		success = false;
-	}
+// 	gHigh = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/high.wav" );
+// 	if( gHigh == NULL )
+// 	{
+// 		printf( "Failed to load high sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+// 		success = false;
+// 	}
 
-	gMedium = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/medium.wav" );
-	if( gMedium == NULL )
-	{
-		printf( "Failed to load medium sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
-		success = false;
-	}
+// 	gMedium = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/medium.wav" );
+// 	if( gMedium == NULL )
+// 	{
+// 		printf( "Failed to load medium sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+// 		success = false;
+// 	}
 
-	gLow = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/low.wav" );
-	if( gLow == NULL )
-	{
-		printf( "Failed to load low sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
-		success = false;
-	}
+// 	gLow = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/low.wav" );
+// 	if( gLow == NULL )
+// 	{
+// 		printf( "Failed to load low sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+// 		success = false;
+// 	}
 
-	return success;
+// 	return success;
 	
 	
-}
+// }
 
 /*void musicClose()
 {
@@ -443,12 +443,12 @@ bool loadMedia()
 	bool success = true;
 
 	//Load sprites
-	if( !gbtexture1.loadFromFile( "/home/mastercoder/Desktop/copTask2/17_mouse_events/button.png" ) )
+	if( !gbtexture1.loadFromFile( "./assets/button.png" ) )
 	{
 		printf( "Failed to load button sprite texture!\n" );
 		success = false;
 	}
-	else if( !gButtonSpriteSheetTexture.loadFromFile( "/home/mastercoder/Desktop/copTask2/17_mouse_events/button.png" ) )
+	else if( !gButtonSpriteSheetTexture.loadFromFile( "./assets/button.png" ) )
 	{
 		printf( "Failed to load button sprite texture!\n" );
 		success = false;
@@ -521,20 +521,14 @@ void Game::init(const char* win_title, int xpos, int ypos, int h, int w, bool fs
     if (fs) {
         flags = SDL_WINDOW_FULLSCREEN;
     }
-
 	//Initialize SDL
-	if( SDL_Init(SDL_INIT_VIDEO| SDL_INIT_AUDIO ) < 0 )
+	if( SDL_Init(SDL_INIT_VIDEO) < 0 )
 	{
 		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
 		success = false;
 	}
-	
 	else
-	{	//Set texture filtering to linear
-		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
-		{
-			printf( "Warning: Linear texture filtering not enabled!" );
-		}
+	{
 		//Create window
 		gWindow = SDL_CreateWindow(win_title, xpos, ypos, h, w, flags);
 		if( gWindow == NULL )
@@ -546,57 +540,109 @@ void Game::init(const char* win_title, int xpos, int ypos, int h, int w, bool fs
 		{
 			//Get window surface
             // gScreenSurface = SDL_GetWindowSurface( gWindow );
-			gRenderer = SDL_CreateRenderer(gWindow,-1,SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-			
+			gRenderer = SDL_CreateRenderer(gWindow,-1,0);
 			if  (gRenderer == NULL) {
 					printf( "Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
 					success = false;
-			} 
-			 //Initialize SDL_mixer
-			if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
-			{
-				printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
-				success = false;
-			}
-			
-			else 
-			{
-			if( !loadMedia() )
-		{
-			printf( "Failed to load media!\n" );
-		}
-		if( !loadMusicMedia() )
-		{
-			printf( "Failed to load music media!\n" );
-		}
-                SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
-                int imgFlags = IMG_INIT_PNG;
-				if( !( IMG_Init( imgFlags ) & imgFlags ) )
-				{
-					printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
-					success = false;
-				}
-				if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
-				{
-				    printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
-				    success = false;
-				}
-            		}
-
+			} else {
+                SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
+            }
 		}
 	}
-
     if (success) {
         isRunning = true;
     } else {
         isRunning = false;
     }
 
+    player = new Object("assets/p1.png", 400,300);
     player = new Object("assets/p1.png", 12376,2048);
     player2 = new Object("assets/p2.png", 128,128);
     map = new Map(); 
 }
+
+// void Game::init(const char* win_title, int xpos, int ypos, int h, int w, bool fs) {
+//     //Initialization flag
+// 	bool success = true;
+//     int flags = 0;
+//     cnt = w-128;
+//     if (fs) {
+//         flags = SDL_WINDOW_FULLSCREEN;
+//     }
+
+// 	//Initialize SDL
+// 	if( SDL_Init(SDL_INIT_VIDEO| SDL_INIT_AUDIO ) < 0 )
+// 	{
+// 		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+// 		success = false;
+// 	}
+	
+// 	else
+// 	{	//Set texture filtering to linear
+// 		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
+// 		{
+// 			printf( "Warning: Linear texture filtering not enabled!" );
+// 		}
+// 		//Create window
+// 		gWindow = SDL_CreateWindow(win_title, xpos, ypos, h, w, flags);
+// 		if( gWindow == NULL )
+// 		{
+// 			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+// 			success = false;
+// 		}
+// 		else
+// 		{
+// 			//Get window surface
+//             // gScreenSurface = SDL_GetWindowSurface( gWindow );
+// 			gRenderer = SDL_CreateRenderer(gWindow,-1,0);
+			
+// 			// gRenderer = SDL_CreateRenderer(gWindow,-1,SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+			
+// 			if  (gRenderer == NULL) {
+// 					printf( "Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
+// 					success = false;
+// 			} 
+// 			 //Initialize SDL_mixer
+// 			// if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+// 			// {
+// 			// 	printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+// 			// 	success = false;
+// 			// }
+			
+// 			else {
+// 				if( !loadMedia() ) {
+// 					printf( "Failed to load media!\n" );
+// 				}
+// 				// if( !loadMusicMedia() ) {
+// 				// 		printf( "Failed to load music media!\n" );
+// 				// }
+//                 SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
+//                 int imgFlags = IMG_INIT_PNG;
+// 				if( !( IMG_Init( imgFlags ) & imgFlags ) )
+// 				{
+// 					printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+// 					success = false;
+// 				}
+// 				// if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+// 				// {
+// 				//     printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+// 				//     success = false;
+// 				// }
+// 			}
+// 		}
+// 	}
+
+//     if (success) {
+//         isRunning = true;
+//     } else {
+//         isRunning = false;
+//     }
+
+//     player = new Object("assets/p1.png", 12376,2048);
+//     player2 = new Object("assets/p2.png", 128,128);
+//     map = new Map(); 
+// }
 
 void Game::handleEvent()  {
     SDL_Event e; 
@@ -612,49 +658,49 @@ void Game::handleEvent()  {
 		{
 			quit = true;
 		}
-		else if( e.type == SDL_KEYDOWN )
-					{
-						switch( e.key.keysym.sym )
-						{//Play high sound effect
-							case SDLK_1:
-							Mix_PlayChannel( -1, gHigh, 0 );
-							break;
+		// else if( e.type == SDL_KEYDOWN )
+		// 			{
+		// 				switch( e.key.keysym.sym )
+		// 				{//Play high sound effect
+		// 					case SDLK_1:
+		// 					Mix_PlayChannel( -1, gHigh, 0 );
+		// 					break;
 							
-							//Play medium sound effect
-							case SDLK_2:
-							Mix_PlayChannel( -1, gMedium, 0 );
-							break;
-						case SDLK_9:
-							//If there is no music playing
-							if( Mix_PlayingMusic() == 0 )
-							{
-								//Play the music
-								Mix_PlayMusic( gMusic, -1 );
-							}
-							//If music is being played
-							else
-							{
-								//If the music is paused
-								if( Mix_PausedMusic() == 1 )
-								{
-									//Resume the music
-									Mix_ResumeMusic();
-								}
-								//If the music is playing
-								else
-								{
-									//Pause the music
-									Mix_PauseMusic();
-								}
-							}
-							break;
+		// 					//Play medium sound effect
+		// 					case SDLK_2:
+		// 					Mix_PlayChannel( -1, gMedium, 0 );
+		// 					break;
+		// 				case SDLK_9:
+		// 					//If there is no music playing
+		// 					if( Mix_PlayingMusic() == 0 )
+		// 					{
+		// 						//Play the music
+		// 						Mix_PlayMusic( gMusic, -1 );
+		// 					}
+		// 					//If music is being played
+		// 					else
+		// 					{
+		// 						//If the music is paused
+		// 						if( Mix_PausedMusic() == 1 )
+		// 						{
+		// 							//Resume the music
+		// 							Mix_ResumeMusic();
+		// 						}
+		// 						//If the music is playing
+		// 						else
+		// 						{
+		// 							//Pause the music
+		// 							Mix_PauseMusic();
+		// 						}
+		// 					}
+		// 					break;
 							
-							case SDLK_0:
-							//Stop the music
-							Mix_HaltMusic();
-							break;
-						}
-					}
+		// 					case SDLK_0:
+		// 					//Stop the music
+		// 					Mix_HaltMusic();
+		// 					break;
+		// 				}
+		// 			}
 		
 		//Handle button events
 		for( int i = 0; i < TOTAL_BUTTONS; ++i )
@@ -681,7 +727,6 @@ void Game::handleEvent()  {
 	SDL_RenderPresent( gRenderer );
     }
     
-
     switch(e.type) {
         case SDL_QUIT:
         {
@@ -708,46 +753,45 @@ void Game::handleEvent()  {
                 case SDLK_RIGHT:
                     player->objMove(KEY_PRESS_SURFACE_RIGHT,b,map->Colliders);
                     break;
-//Play high sound effect
-		case SDLK_1:
-		Mix_PlayChannel( -1, gHigh, 0 );
-		break;
-		
-		//Play medium sound effect
-		case SDLK_2:
-		Mix_PlayChannel( -1, gMedium, 0 );
-		break;
-		 case SDLK_9:
-                            //If there is no music playing
-                            if( Mix_PlayingMusic() == 0 )
-                            {
-                                //Play the music
-                                Mix_PlayMusic( gMusic, -1 );
-                            }
-                            //If music is being played
-                            else
-                            {
-                                //If the music is paused
-                                if( Mix_PausedMusic() == 1 )
-                                {
-                                    //Resume the music
-                                    Mix_ResumeMusic();
-                                }
-                                //If the music is playing
-                                else
-                                {
-                                    //Pause the music
-                                    Mix_PauseMusic();
-                                }
-                            }
-                            break;
-                            
-                            case SDLK_0:
-                            //Stop the music
-                            Mix_HaltMusic();
-                            break;
+				// //Play high sound effect
+				// case SDLK_1:
+				// 	Mix_PlayChannel( -1, gHigh, 0 );
+				// 	break;
+				
+				// //Play medium sound effect
+				// case SDLK_2:
+				// 	Mix_PlayChannel( -1, gMedium, 0 );
+				// 	break;
+				// case SDLK_9:
+				// //If there is no music playing
+				// 	if( Mix_PlayingMusic() == 0 )
+				// 	{
+				// 		//Play the music
+				// 		Mix_PlayMusic( gMusic, -1 );
+				// 	}
+				// //If music is being played
+				// 	else
+				// 	{
+				// 		//If the music is paused
+				// 		if( Mix_PausedMusic() == 1 )
+				// 		{
+				// 			//Resume the music
+				// 			Mix_ResumeMusic();
+				// 		}
+				// 		//If the music is playing
+				// 		else
+				// 		{
+				// 			//Pause the music
+				// 			Mix_PauseMusic();
+				// 		}
+				// 	}
+				// 	break;
+				
+				// case SDLK_0:
+				// 	//Stop the music
+				// 	Mix_HaltMusic();
+				// break;
                         
-                    
                 default:
                 break;
             }

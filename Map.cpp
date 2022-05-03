@@ -73,7 +73,7 @@ void Map::setColliders() {
         for (int i=0; i<Map::MAP_Y; i++) {
             if (map[Map::MAP_X*i + j] == 30) {
                 Map::Colliders[count] = new Tuple(j,i);
-                cout << "Set" << j << ", " << i << " " << std::endl;
+                // cout << "Set" << j << ", " << i << " " << std::endl;
                 count++;
             }
         }
