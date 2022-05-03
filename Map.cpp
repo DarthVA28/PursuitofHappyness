@@ -78,6 +78,11 @@ void Map::setColliders() {
             }
         }
     }
+    Map::Colliders[count] = new Tuple(47,123);
+    count++;
+    Map::Colliders[count] = new Tuple(48,123);
+    count++;
+    cout << count << endl;
 }
 
 void Map::Collisions(int camx, int camy, Object* player){

@@ -7,7 +7,7 @@ using namespace std;
 Object::Object(const char* texturesheet, int x, int y) {
     xpos = x;
     ypos = y;
-    velocity = 64;
+    velocity = 20;
     renderer = Game::gRenderer;
     objTexture = TM::LoadTexture(texturesheet);
 
@@ -97,7 +97,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                 }
             } 
             if (checkCollision(b) || isTileCollision) {
-                cout << "ok..." << endl;
+                // cout << "ok..." << endl;
                 ypos += velocity;
             }
             break;
@@ -112,7 +112,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                 }
             } 
             if (checkCollision(b) || isTileCollision) {
-                cout << "ok..." << endl;
+                // cout << "ok..." << endl;
                 ypos -= velocity;
             }
             break;
@@ -127,7 +127,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                 }
             } 
             if (checkCollision(b) || isTileCollision) {
-                cout << "ok..." << endl;
+                // cout << "ok..." << endl;
                 xpos += velocity;
             }
             break;
@@ -142,7 +142,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                 }
             } 
             if (checkCollision(b)|| isTileCollision) {
-                cout << "ok..." << endl;
+                // cout << "ok..." << endl;
                 xpos -= velocity;
             }
             break;
@@ -164,6 +164,10 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
     mCollider.y = ypos;
     mCollider.w = 2*srcRect.w;
     mCollider.h = 2*srcRect.h;
+
+    cout << "COORDINATES:" << endl;
+    cout << "X:" << xpos << endl;
+    cout << "Y:" << ypos << endl;
 }
 
 void Object::objMove(int dir) {
@@ -253,7 +257,7 @@ bool Object::checkCollision(SDL_Rect b) {
         } else if( leftA >= rightB ) {
             return false;
         } else {
-            cout << "Collision1" << endl;
+            // cout << "Collision1" << endl;
             return true;
         }
 }
@@ -292,7 +296,7 @@ bool Object::checkTileCollision(int x, int y) {
         } else if( leftA >= rightB ) {
             return false;
         } else {
-            cout << "Collision2" << endl;
+            // cout << "Collision2" << endl;
             return true;
         }
 }

@@ -10,8 +10,8 @@ class Map {
 public:
     static const int MAP_X = 220;
     static const int MAP_Y = 130;
-    static const int BARRIERS = 2637;
-    Tuple* Colliders[2637];
+    static const int BARRIERS = 2639;
+    Tuple* Colliders[2639];
 
     Map();
     ~Map();
