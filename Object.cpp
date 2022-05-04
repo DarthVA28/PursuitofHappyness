@@ -13,6 +13,11 @@ Object::Object(const char* texturesheet, int x, int y) {
     renderer = Game::gRenderer;
     objTexture = TM::LoadTexture(texturesheet);
 
+    for(int i=0;i<11;i++){
+        SDL_Rect* a = new SDL_Rect;
+        textureSheet[i] = *a;
+    }
+
     textureSheet[0].x = 0;
     textureSheet[0].y = 0;
     textureSheet[0].w = 32;
