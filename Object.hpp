@@ -18,14 +18,18 @@ public:
     int getx();
     int gety();
     SDL_Rect getCollider();
+    void changeFrame(int dir);
+    bool inMotion;
 
 private:
 
     int xpos;
     int ypos;
     int velocity;
+    int frame;
 
     SDL_Texture* objTexture;
+    SDL_Rect textureSheet[16];
     SDL_Rect srcRect, destRect;
     SDL_Renderer* renderer;
 

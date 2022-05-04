@@ -29,6 +29,8 @@ bool firstScreen = true;
 bool Game :: firstCheck =true;
 SDL_Renderer* Game::gRenderer = nullptr;
 
+unsigned int t1, t2;
+
 enum LButtonSprite
 {
 	BUTTON_SPRITE_MOUSE_OUT = 0,
@@ -505,7 +507,6 @@ Map* map;
 
 SDL_Rect Game::gCamera = {0,0,800,600};
 
-
 Game::Game() {}
 
 Game::~Game() {}
@@ -552,8 +553,8 @@ void Game::init(const char* win_title, int xpos, int ypos, int h, int w, bool fs
         isRunning = false;
     }
 
-    player = new Object("assets/p1.png", 400,300);
-    player = new Object("assets/p1.png", 9412,4532);
+    // player = new Object("assets/p1.png", 400,300);
+    player = new Object("assets/player.png", 9412,4532);
     player2 = new Object("assets/p2.png", 128,128);
     map = new Map(); 
 }
@@ -737,18 +738,26 @@ void Game::handleEvent()  {
             switch( e.key.keysym.sym ) {
                 case SDLK_UP:
                     player->objMove(KEY_PRESS_SURFACE_UP,b,map->Colliders);
+					player->changeFrame(KEY_PRESS_SURFACE_UP);
+					t1 = SDL_GetTicks();
                     break;
 
                 case SDLK_DOWN:
                     player->objMove(KEY_PRESS_SURFACE_DOWN,b,map->Colliders);
-                    break;
+                    player->changeFrame(KEY_PRESS_SURFACE_DOWN);
+					t1 = SDL_GetTicks();
+					break;
 
                 case SDLK_LEFT:
                     player->objMove(KEY_PRESS_SURFACE_LEFT,b,map->Colliders);
+					player->changeFrame(KEY_PRESS_SURFACE_LEFT);
+					t1 = SDL_GetTicks();
                     break;
 
                 case SDLK_RIGHT:
                     player->objMove(KEY_PRESS_SURFACE_RIGHT,b,map->Colliders);
+					player->changeFrame(KEY_PRESS_SURFACE_RIGHT);
+					t1 = SDL_GetTicks();
                     break;
 				// //Play high sound effect
 				// case SDLK_1:
@@ -806,6 +815,15 @@ void Game::update() {
 
     gCamera.x = (player->getx()-400);
     gCamera.y = (player->gety()-300);
+
+	if (player->inMotion == false) {
+		t2 = SDL_GetTicks();
+		if (t2-t1 > 100){
+			player->changeFrame(100);
+		}
+	} 
+
+	player->inMotion = false;
 
     // if( gCamera.x < 0 ) { 
     //     gCamera.x = 0;
