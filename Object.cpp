@@ -2,12 +2,14 @@
 #include "TM.hpp"
 #include "Map.hpp"
 #include <iostream>
+#include <string>
 using namespace std;
+using std::string;
 
 Object::Object(const char* texturesheet, int x, int y) {
     xpos = x;
     ypos = y;
-    velocity = 20;
+    velocity = 64;
     renderer = Game::gRenderer;
     objTexture = TM::LoadTexture(texturesheet);
 
@@ -81,6 +83,11 @@ Object::Object(const char* texturesheet, int x, int y) {
     mCollider.y = ypos;
     mCollider.w = 2*srcRect.w;
     mCollider.h = 2*srcRect.h;
+    
+    for(int i =0; i <5; i++)
+    {
+    inventoryItems[i] = "";
+    }
 }
 
 // void Object::objMove(int dir, SDL_Rect b) {
@@ -152,7 +159,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                 }
             } 
             if (checkCollision(b) || isTileCollision) {
-                // cout << "ok..." << endl;
+                cout << "ok..." << endl;
                 ypos += velocity;
             }
             break;
@@ -167,7 +174,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                 }
             } 
             if (checkCollision(b) || isTileCollision) {
-                // cout << "ok..." << endl;
+                cout << "ok..." << endl;
                 ypos -= velocity;
             }
             break;
@@ -182,7 +189,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                 }
             } 
             if (checkCollision(b) || isTileCollision) {
-                // cout << "ok..." << endl;
+                cout << "ok..." << endl;
                 xpos += velocity;
             }
             break;
@@ -197,7 +204,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                 }
             } 
             if (checkCollision(b)|| isTileCollision) {
-                // cout << "ok..." << endl;
+                cout << "ok..." << endl;
                 xpos -= velocity;
             }
             break;
@@ -219,15 +226,9 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
     mCollider.y = ypos;
     mCollider.w = 2*srcRect.w;
     mCollider.h = 2*srcRect.h;
-
-    // cout << Map::getRegion(xpos,ypos) << endl;
-
-    // cout << "COORDINATES:" << endl;
-    // cout << xpos << ", " << ypos << endl;
 }
 
 void Object::objMove(int dir) {
-    inMotion = true;
     switch (dir) {
         case 1:
             ypos -= velocity;
@@ -314,7 +315,7 @@ bool Object::checkCollision(SDL_Rect b) {
         } else if( leftA >= rightB ) {
             return false;
         } else {
-            // cout << "Collision1" << endl;
+            cout << "Collision1" << endl;
             return true;
         }
 }
@@ -353,10 +354,41 @@ bool Object::checkTileCollision(int x, int y) {
         } else if( leftA >= rightB ) {
             return false;
         } else {
-            // cout << "Collision2" << endl;
+            cout << "Collision2" << endl;
             return true;
         }
 }
+
+SDL_Rect Object::getCollider() {
+    return mCollider;
+}
+
+int Object::getx() {
+    return xpos;
+}
+
+int Object::gety() {
+    return ypos;
+}
+
+void Object::addItems( string str)
+
+{
+	for(int i =0; i < 5; i++)
+	{
+			if(inventoryItems[i] == "")
+			{
+			inventoryItems[i] = str;
+			break;
+			}
+	}
+}
+
+    string Object::getIElem(string s[],int i)
+    {
+    return s[i];
+    }
+
 
 void Object::changeFrame(int dir) {
     if (dir==1) {
@@ -390,16 +422,4 @@ void Object::changeFrame(int dir) {
             frame = 0;
         }
     }
-}
-
-SDL_Rect Object::getCollider() {
-    return mCollider;
-}
-
-int Object::getx() {
-    return xpos;
-}
-
-int Object::gety() {
-    return ypos;
 }

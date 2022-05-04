@@ -22,10 +22,11 @@ public:
     void clean();
 
     bool running();
+    
+    static bool firstCheck;
 
     int cnt;
 
-    static bool firstCheck;
     static SDL_Renderer *gRenderer;
     static SDL_Rect gCamera;
 

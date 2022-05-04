@@ -4,6 +4,7 @@
 #include <vector>
 #include "Tuple.hpp"
 #include <string>
+
 using std::vector;
 using std::string;
 
@@ -12,8 +13,8 @@ class Map {
 public:
     static const int MAP_X = 220;
     static const int MAP_Y = 130;
-    static const int BARRIERS = 2639;
-    Tuple* Colliders[2639];
+    static const int BARRIERS = 2637;
+    Tuple* Colliders[2637];
 
     Map();
     ~Map();
@@ -29,8 +30,7 @@ public:
    
     void setColliders();
     void Collisions(int camx, int camy, Object* player);
-
-    static string getRegion(int x, int y);
+    string getRegion(int x, int y);
 
 private: 
 

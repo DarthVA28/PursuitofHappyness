@@ -1,7 +1,9 @@
 #pragma once
 #include "Game.hpp"
 #include "Tuple.hpp"
+#include <string>
 
+using std::string;
 class Object {
 
 public:
@@ -15,8 +17,12 @@ public:
     void objMove(int dir, SDL_Rect b, Tuple* Colliders[]);
     bool checkCollision(SDL_Rect b);
     bool checkTileCollision(int x, int y);
+      string inventoryItems[5];
+     void addItems(string str);
+    int numInventoryItems;
     int getx();
     int gety();
+    string getIElem(string s[], int i);
     SDL_Rect getCollider();
     void changeFrame(int dir);
     bool inMotion;
