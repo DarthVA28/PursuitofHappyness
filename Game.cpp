@@ -3,21 +3,19 @@
 #include "Object.hpp"
 #include "Map.hpp"
 #include "Tuple.hpp"
-#include <SDL2/SDL_mixer.h>
+// #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 #include <string>
 
-
-
 using std::string;
 
-Mix_Music *gMusic = nullptr;
+// Mix_Music *gMusic = nullptr;
 
-//The sound effects that will be used
-Mix_Chunk *gScratch = NULL;
-Mix_Chunk *gHigh = NULL;
-Mix_Chunk *gMedium = NULL;
-Mix_Chunk *gLow = NULL;
+// //The sound effects that will be used
+// Mix_Chunk *gScratch = NULL;
+// Mix_Chunk *gHigh = NULL;
+// Mix_Chunk *gMedium = NULL;
+// Mix_Chunk *gLow = NULL;
 
 
 //Screen dimension constants
@@ -477,41 +475,41 @@ bool loadMusicMedia()
 
 
 	//Load music
-	gMusic = Mix_LoadMUS( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/beat.wav" );
-	if( gMusic == NULL )
-	{
-		printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
-		success = false;
-	}
+	// gMusic = Mix_LoadMUS( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/beat.wav" );
+	// if( gMusic == NULL )
+	// {
+	// 	printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
+	// 	success = false;
+	// }
 	
-	//Load sound effects
-	gScratch = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/scratch.wav" );
-	if( gScratch == NULL )
-	{
-		printf( "Failed to load scratch sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
-		success = false;
-	}
+	// //Load sound effects
+	// gScratch = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/scratch.wav" );
+	// if( gScratch == NULL )
+	// {
+	// 	printf( "Failed to load scratch sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+	// 	success = false;
+	// }
 	
-	gHigh = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/high.wav" );
-	if( gHigh == NULL )
-	{
-		printf( "Failed to load high sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
-		success = false;
-	}
+	// gHigh = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/high.wav" );
+	// if( gHigh == NULL )
+	// {
+	// 	printf( "Failed to load high sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+	// 	success = false;
+	// }
 
-	gMedium = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/medium.wav" );
-	if( gMedium == NULL )
-	{
-		printf( "Failed to load medium sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
-		success = false;
-	}
+	// gMedium = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/medium.wav" );
+	// if( gMedium == NULL )
+	// {
+	// 	printf( "Failed to load medium sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+	// 	success = false;
+	// }
 
-	gLow = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/low.wav" );
-	if( gLow == NULL )
-	{
-		printf( "Failed to load low sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
-		success = false;
-	}
+	// gLow = Mix_LoadWAV( "/home/mastercoder/Desktop/copTask2/IITGame-master/assets/low.wav" );
+	// if( gLow == NULL )
+	// {
+	// 	printf( "Failed to load low sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+	// 	success = false;
+	// }
 
 	return success;
 	
@@ -735,11 +733,11 @@ void Game::init(const char* win_title, int xpos, int ypos, int h, int w, bool fs
 					success = false;
 			} 
 			 //Initialize SDL_mixer
-			if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
-			{
-				printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
-				success = false;
-			}
+			// if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+			// {
+			// 	printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+			// 	success = false;
+			// }
 			
 			else 
 			{
@@ -747,10 +745,10 @@ void Game::init(const char* win_title, int xpos, int ypos, int h, int w, bool fs
 		{
 			printf( "Failed to load media!\n" );
 		}
-		if( !loadMusicMedia() )
-		{
-			printf( "Failed to load music media!\n" );
-		}
+		// if( !loadMusicMedia() )
+		// {
+		// 	printf( "Failed to load music media!\n" );
+		// }
 		
 		
                 SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
@@ -761,11 +759,11 @@ void Game::init(const char* win_title, int xpos, int ypos, int h, int w, bool fs
 					printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
 					success = false;
 				}
-				if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
-				{
-				    printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
-				    success = false;
-				}
+				// if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+				// {
+				//     printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+				//     success = false;
+				// }
 				if( TTF_Init() == -1 )
 				{
 					printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
@@ -789,8 +787,8 @@ void Game::init(const char* win_title, int xpos, int ypos, int h, int w, bool fs
     player = new Object("assets/p1.png", 12376,2048);
     player2 = new Object("assets/p2.png", 12312,2048);
     map = new Map(); 
-        player->addItems("item1");
-player->addItems("item4");
+	player->addItems("item1");
+	player->addItems("item4");
 }
 
 void Game::handleEvent()  {
@@ -800,65 +798,61 @@ void Game::handleEvent()  {
     bool quit = false;
     while(!quit && firstScreen)
     {
-	while( SDL_PollEvent( &e ) != 0 )
-	{
-		//User requests quit
-		if( e.type == SDL_QUIT )
-		{
-			quit = true;
-		}
-		else if( e.type == SDL_KEYDOWN )
-					{
-						switch( e.key.keysym.sym )
-						{//Play high sound effect
-							case SDLK_1:
-							Mix_PlayChannel( -1, gHigh, 0 );
-							break;
+		while( SDL_PollEvent( &e ) != 0 ) {
+			//User requests quit
+			if( e.type == SDL_QUIT )
+			{
+				quit = true;
+			}
+		// else if( e.type == SDL_KEYDOWN )
+		// 			{
+		// 				switch( e.key.keysym.sym )
+		// 				{//Play high sound effect
+		// 					case SDLK_1:
+		// 					Mix_PlayChannel( -1, gHigh, 0 );
+		// 					break;
 							
-							//Play medium sound effect
-							case SDLK_2:
-							Mix_PlayChannel( -1, gMedium, 0 );
-							break;
-						case SDLK_9:
-							//If there is no music playing
-							if( Mix_PlayingMusic() == 0 )
-							{
-								//Play the music
-								Mix_PlayMusic( gMusic, -1 );
-							}
-							//If music is being played
-							else
-							{
-								//If the music is paused
-								if( Mix_PausedMusic() == 1 )
-								{
-									//Resume the music
-									Mix_ResumeMusic();
-								}
-								//If the music is playing
-								else
-								{
-									//Pause the music
-									Mix_PauseMusic();
-								}
-							}
-							break;
+		// 					//Play medium sound effect
+		// 					case SDLK_2:
+		// 					Mix_PlayChannel( -1, gMedium, 0 );
+		// 					break;
+		// 				case SDLK_9:
+		// 					//If there is no music playing
+		// 					if( Mix_PlayingMusic() == 0 )
+		// 					{
+		// 						//Play the music
+		// 						Mix_PlayMusic( gMusic, -1 );
+		// 					}
+		// 					//If music is being played
+		// 					else
+		// 					{
+		// 						//If the music is paused
+		// 						if( Mix_PausedMusic() == 1 )
+		// 						{
+		// 							//Resume the music
+		// 							Mix_ResumeMusic();
+		// 						}
+		// 						//If the music is playing
+		// 						else
+		// 						{
+		// 							//Pause the music
+		// 							Mix_PauseMusic();
+		// 						}
+		// 					}
+		// 					break;
 							
-							case SDLK_0:
-							//Stop the music
-							Mix_HaltMusic();
-							break;
-						}
-					}
+		// 					case SDLK_0:
+		// 					//Stop the music
+		// 					Mix_HaltMusic();
+		// 					break;
+		// 				}
+		// 			}
 		
 		//Handle button events
-		for( int i = 0; i < TOTAL_BUTTONS; ++i )
-		{
-			gButtons[ i ].handleEvent( &e );
-			
+			for( int i = 0; i < TOTAL_BUTTONS; ++i ) {
+				gButtons[ i ].handleEvent( &e );	
+			}
 		}
-	
-	}
 
 	//Clear screen
 	SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
@@ -878,8 +872,6 @@ void Game::handleEvent()  {
 	//Update screen
 	SDL_RenderPresent( gRenderer );
     }
-
-    
 
     switch(e.type) {
         case SDL_QUIT:
@@ -911,77 +903,68 @@ void Game::handleEvent()  {
                     break;
 
                 case SDLK_RIGHT:
-
                     player->objMove(KEY_PRESS_SURFACE_RIGHT,b,map->Colliders);
 					player->changeFrame(KEY_PRESS_SURFACE_RIGHT);
 					t1 = SDL_GetTicks();
                     break;
                 case SDLK_i:
-                                printf("6");
-                openInventory = true;
+					printf("6");
+                	openInventory = true;
+					break;
+                case SDLK_o:
+                	openInventory = false;
+                	break;
 
-                break;
-                   case SDLK_o:
+				//Play high sound effect
+				// case SDLK_1:
 
-                openInventory = false;
-
-                break;
-//Play high sound effect
-		case SDLK_1:
-
-		Mix_PlayChannel( -1, gHigh, 0 );
-		break;
-		
-		//Play medium sound effect
-		case SDLK_2:
-		Mix_PlayChannel( -1, gMedium, 0 );
-		break;
-		 case SDLK_9:
-                            //If there is no music playing
-                            if( Mix_PlayingMusic() == 0 )
-                            {
-                                //Play the music
-                                Mix_PlayMusic( gMusic, -1 );
-                            }
-                            //If music is being played
-                            else
-                            {
-                                //If the music is paused
-                                if( Mix_PausedMusic() == 1 )
-                                {
-                                    //Resume the music
-                                    Mix_ResumeMusic();
-                                }
-                                //If the music is playing
-                                else
-                                {
-                                    //Pause the music
-                                    Mix_PauseMusic();
-                                }
-                            }
-                            break;
+				// Mix_PlayChannel( -1, gHigh, 0 );
+				// break;
+				
+				// //Play medium sound effect
+				// case SDLK_2:
+				// 	Mix_PlayChannel( -1, gMedium, 0 );
+				// 	break;
+				// case SDLK_9:
+				// 	//If there is no music playing
+				// 	if( Mix_PlayingMusic() == 0 )
+				// 	{
+				// 		//Play the music
+				// 		Mix_PlayMusic( gMusic, -1 );
+				// 	}
+				// 	//If music is being played
+				// 	else
+				// 	{
+				// 		//If the music is paused
+				// 		if( Mix_PausedMusic() == 1 )
+				// 		{
+				// 			//Resume the music
+				// 			Mix_ResumeMusic();
+				// 		}
+				// 		//If the music is playing
+				// 		else
+				// 		{
+				// 			//Pause the music
+				// 			Mix_PauseMusic();
+				// 		}
+				// 	}
+				// 	break;
                             
 		    case SDLK_0:
 		    //Stop the music
-		    Mix_HaltMusic();
-		    break;
+		    	Mix_HaltMusic();
+		    	break;
                         
                     
-                default:
+			default:
                 break;
             }
-            
             break; 
-
         }
-       
-
-            break;
+		break;
     }
-    	musicOnButton.handleEvent( &e );
+	musicOnButton.handleEvent( &e );
 	musicOffButton.handleEvent(&e);
-
-        
 }
 
 void Game::update() {

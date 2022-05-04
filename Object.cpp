@@ -7,9 +7,64 @@ using namespace std;
 Object::Object(const char* texturesheet, int x, int y) {
     xpos = x;
     ypos = y;
-    velocity = 64;
+    velocity = 20;
     renderer = Game::gRenderer;
     objTexture = TM::LoadTexture(texturesheet);
+
+    textureSheet[0].x = 0;
+    textureSheet[0].y = 0;
+    textureSheet[0].w = 32;
+    textureSheet[0].h = 32;
+
+    textureSheet[1].x = 32;
+    textureSheet[1].y = 0;
+    textureSheet[1].w = 32;
+    textureSheet[1].h = 32;
+
+    textureSheet[2].x = 64;
+    textureSheet[2].y = 0;
+    textureSheet[2].w = 32;
+    textureSheet[2].h = 32;
+
+    textureSheet[3].x = 0;
+    textureSheet[3].y = 32;
+    textureSheet[3].w = 32;
+    textureSheet[3].h = 32;
+
+    textureSheet[4].x = 32;
+    textureSheet[4].y = 32;
+    textureSheet[4].w = 32;
+    textureSheet[4].h = 32;
+
+    textureSheet[5].x = 64;
+    textureSheet[5].y = 32;
+    textureSheet[5].w = 32;
+    textureSheet[5].h = 32;
+
+    textureSheet[6].x = 96;
+    textureSheet[6].y = 32;
+    textureSheet[6].w = 32;
+    textureSheet[6].h = 32;
+
+    textureSheet[7].x = 0;
+    textureSheet[7].y = 64;
+    textureSheet[7].w = 32;
+    textureSheet[7].h = 32;
+
+    textureSheet[8].x = 32;
+    textureSheet[8].y = 64;
+    textureSheet[8].w = 32;
+    textureSheet[8].h = 32;
+
+    textureSheet[9].x = 64;
+    textureSheet[9].y = 64;
+    textureSheet[9].w = 32;
+    textureSheet[9].h = 32;
+
+    textureSheet[10].x = 96;
+    textureSheet[10].y = 64;
+    textureSheet[10].w = 32;
+    textureSheet[10].h = 32;
 
     srcRect.h = 32;
     srcRect.w = 32;
@@ -97,7 +152,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                 }
             } 
             if (checkCollision(b) || isTileCollision) {
-                cout << "ok..." << endl;
+                // cout << "ok..." << endl;
                 ypos += velocity;
             }
             break;
@@ -112,7 +167,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                 }
             } 
             if (checkCollision(b) || isTileCollision) {
-                cout << "ok..." << endl;
+                // cout << "ok..." << endl;
                 ypos -= velocity;
             }
             break;
@@ -127,7 +182,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                 }
             } 
             if (checkCollision(b) || isTileCollision) {
-                cout << "ok..." << endl;
+                // cout << "ok..." << endl;
                 xpos += velocity;
             }
             break;
@@ -142,7 +197,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                 }
             } 
             if (checkCollision(b)|| isTileCollision) {
-                cout << "ok..." << endl;
+                // cout << "ok..." << endl;
                 xpos -= velocity;
             }
             break;
@@ -164,9 +219,15 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
     mCollider.y = ypos;
     mCollider.w = 2*srcRect.w;
     mCollider.h = 2*srcRect.h;
+
+    // cout << Map::getRegion(xpos,ypos) << endl;
+
+    // cout << "COORDINATES:" << endl;
+    // cout << xpos << ", " << ypos << endl;
 }
 
 void Object::objMove(int dir) {
+    inMotion = true;
     switch (dir) {
         case 1:
             ypos -= velocity;
@@ -221,7 +282,7 @@ void Object::objRender(int camx, int camy) {
     destRect.y = ypos - Game::gCamera.y;
     destRect.w = 2*srcRect.w;
     destRect.h = 2*srcRect.h;
-    SDL_RenderCopy(renderer,objTexture,&srcRect,&destRect);
+    SDL_RenderCopy(renderer,objTexture,&textureSheet[frame],&destRect);
 }
 
 bool Object::checkCollision(SDL_Rect b) {
@@ -253,7 +314,7 @@ bool Object::checkCollision(SDL_Rect b) {
         } else if( leftA >= rightB ) {
             return false;
         } else {
-            cout << "Collision1" << endl;
+            // cout << "Collision1" << endl;
             return true;
         }
 }
@@ -292,9 +353,43 @@ bool Object::checkTileCollision(int x, int y) {
         } else if( leftA >= rightB ) {
             return false;
         } else {
-            cout << "Collision2" << endl;
+            // cout << "Collision2" << endl;
             return true;
         }
+}
+
+void Object::changeFrame(int dir) {
+    if (dir==1) {
+        if (frame<2){
+            frame++;
+        } else {
+            frame = 0;
+        }
+    } else if (dir==2){
+        if (frame<2){
+            frame++;
+        } else {
+            frame = 0;
+        }
+    } else if (dir==3){
+        if (frame>=7 && frame<10){
+            frame++;
+        } else {
+            frame = 7;
+        }
+    } else if (dir==4){
+        if (frame>=3 && frame<6){
+            frame++;
+        } else {
+            frame = 3;
+        }
+    } else {
+        if (frame<2){
+            frame++;
+        } else {
+            frame = 0;
+        }
+    }
 }
 
 SDL_Rect Object::getCollider() {
