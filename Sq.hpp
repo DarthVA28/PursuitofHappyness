@@ -5,7 +5,7 @@ public:
     int xc;
     int yc;
 
-    Rect(int x, int y) {
+    Sq(int x, int y) {
         xc = x;
         yc = y;
     }

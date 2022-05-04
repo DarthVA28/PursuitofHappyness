@@ -5,7 +5,8 @@
 #include <iostream>
 #include <string>
 #include "Rect.hpp"
-#include "Sq.hpp";
+#include "LRect.hpp"
+#include "Sq.hpp"
 using namespace std;
 
 int map1[Map::MAP_X*Map::MAP_Y] = MAP_WT;  
@@ -139,7 +140,6 @@ string Map::getRegion(int x, int y) {
     Rect *MasalaMix = new Rect(10112, 3192, 10112, 3452);
     Rect *Chaayos = new Rect(10112, 3492, 10112, 3552);
     Rect *Rajdhani = new Rect(10112, 3572, 10112, 3752);
-    Rect 
 
     // LARGE BUILDINGS 
     LRect *RedSq = new LRect(7312, 3832,8192, 4852);
@@ -153,20 +153,107 @@ string Map::getRegion(int x, int y) {
     LRect *Grounds = new LRect(5372, 1852, 9692, 2932);
 
     // YULU STANDS 
-    Rect *YHim = new Rect(3072, 7592, 3072, 7612);
-    Rect *YLHC = new Rect(5052, 5252,5332, 5252);
-    Rect *YHos = new Rect(9772, 3032, 9992, 3032);
-    Rect *YSac = new Rect(11572, 2412, 11572, 2492);
+    // Rect *YHim = new Rect(3072, 7592, 3072, 7612);
+    // Rect *YLHC = new Rect(5052, 5252,5332, 5252);
+    // Rect *YHos = new Rect(9772, 3032, 9992, 3032);
+    // Rect *YSac = new Rect(11572, 2412, 11572, 2492);
 
     // Circles 
-    Sq *CWin = new Sq(11552, 4632);
+    Sq *CVin = new Sq(11552, 4632);
     Sq *CHim = new Sq(5472, 6872);
     Sq *CSac = new Sq(11552, 3092);
     Sq *CJwl = new Sq(12412, 4632);
 
-
-    if (Satpura1->inside(x,y) || Satpura2->inside(x,y) || Satpura3->inside(x,y)) {
+    if (Jwala->inside(x,y)) {
+        return "JWALAMUKHI";
+    } else if (Ara->inside(x,y)){
+        return "ARAVALI";
+    } else if (Kara->inside(x,y)){
+        return "KARAKORAM";
+    } else if (Nilgiri->inside(x,y)){
+        return "NILGIRI";
+    } else if (AraNM->inside(x,y)){
+        return "ARAVALI NIGHT MESS";
+    } else if (Satpura1->inside(x,y) || Satpura2->inside(x,y) || Satpura3->inside(x,y)) {
         return "SATPURA";
+    } else if (Kum1->inside(x,y) || Kum2->inside(x,y)) {
+        return "KUMAON";
+    } else if (Vindy1->inside(x,y) || Vindy2->inside(x,y)) {
+        return "VINDYANCHAL";
+    } else if (Shiva->inside(x,y)) {
+        return "SHIVALIK";
+    } else if (Zan1->inside(x,y) || Zan2->inside(x,y)){
+        return "ZANSKAR";
+    } else if (Girnar->inside(x,y)){
+        return "GIRNAR";
+    } else if (Udai->inside(x,y)){
+        return "UDAIGIRI";
+    } else if (Sapt->inside(x,y)){
+        return "SAPTAGIRI";
+    } else if (Kailash->inside(x,y)){
+        return "KAILASH";
+    } else if (Him->inside(x,y)){
+        return "HIMADRI";
+    } else if (NewLHC1->inside(x,y) || NewLHC2->inside(x,y)){
+        return "NEW LHC";
+    } else if (Textile->inside(x,y)){
+        return "TEXTILE DEPT.";
+    } else if (DOD->inside(x,y)){
+        return "DEPT. OF DESIGN";
+    } else if (SBI->inside(x,y)){
+        return "SBI";
+    } else if (Nal->inside(x,y)){
+        return "NALANDA APARTMENTS";
+    } else if (Staff->inside(x,y)){
+        return "STAFF CANTEEN";
+    } else if (Lib1->inside(x,y) || Lib2->inside(x,y)){
+        return "CENTRAL LIBRARY";
+    } else if (LibEnt->inside(x,y)){
+        return "LIBRARY ENTRANCE";
+    } else if (Nescafe->inside(x,y)){
+        return "NESCAFE";
+    } else if (Amul1->inside(x,y) || Amul2->inside(x,y)){
+        return "AMUL";
+    } else if (Shiru->inside(x,y)){
+        return "SHIRU CAFE";
+    } else if (Exhall->inside(x,y)){
+        return "EXHALL";
+    } else if (SIT->inside(x,y)){
+        return "SCHOOL OF IT";
+    } else if (Bharti2->inside(x,y) || Bharti1->inside(x,y)){
+        return "BHARTI BUILDING";
+    } else if (Hospital->inside(x,y)){
+        return "IITD HOSPITAL";
+    } else if (MasalaMix->inside(x,y)){
+        return "MASALA MIX";
+    } else if (Chaayos->inside(x,y)){
+        return "CHAAYOS";
+    } else if (Rajdhani->inside(x,y)){
+        return "RAJDHANI";
+    } else if (RedSq->inside(x,y)){
+        return "RED SQUARE";
+    } else if (MainB->inside(x,y)){
+        return "MAIN BUILDING";
+    } else if (Biotech->inside(x,y)){
+        return "BIOTECH LAWNS";
+    } else if (MLawn->inside(x,y)){
+        return "MECH LAWN";
+    } else if (CSC->inside(x,y)){
+        return "IITD CSC";
+    } else if (SAC->inside(x,y)){
+        return "SAC";
+    } else if (Parking->inside(x,y)){
+        return "VISITOR PARKING";
+    } else if (Grounds->inside(x,y)){
+        return "SPORTS GROUNDS";
+    } else if (CVin->inside(x,y)){
+        return "VINDY CIRCLE";
+    } else if (CHim->inside(x,y)){
+        return "HIMADRI CIRCLE";
+    } else if (CSac->inside(x,y)){
+        return "SAC CIRCLE";
+    } else if (CJwl->inside(x,y)){
+        return "JWALA CIRCLE";
     } else {
         return "";
     }
