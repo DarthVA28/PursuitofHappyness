@@ -554,7 +554,7 @@ void Game::init(const char* win_title, int xpos, int ypos, int h, int w, bool fs
     }
 
     // player = new Object("assets/p1.png", 400,300);
-    player = new Object("assets/player.png", 9412,4532);
+    player = new Object("assets/player2.png", 9412,4532);
     player2 = new Object("assets/p2.png", 128,128);
     map = new Map(); 
 }
