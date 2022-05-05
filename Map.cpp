@@ -209,6 +209,7 @@ void Map::Drawitems( string item, int i) {
     TM::Draw(item5,itemsrc,itemdest);
     }
     
+    
 }
 
 void Map::DrawplayerOneScore() {
@@ -296,7 +297,7 @@ const char* Map::getRegion(int x, int y) {
     Rect *Rajdhani = new Rect(10112, 3572, 10112, 3752);
 
     // LARGE BUILDINGS 
-    LRect *RedSq = new LRect(7312, 3832,8192, 4852);
+    LRect *RedSq = new LRect(7306, 3828,8226, 4908);
     LRect *MainB = new LRect(5552, 4872,7232, 5552);
     LRect *Biotech = new LRect(5572, 5652,7212, 6832);
     LRect *MLawn = new LRect(7752, 5572, 8125, 6132);
@@ -317,6 +318,22 @@ const char* Map::getRegion(int x, int y) {
     Sq *CHim = new Sq(5472, 6872);
     Sq *CSac = new Sq(11552, 3092);
     Sq *CJwl = new Sq(12412, 4632);
+    
+    
+    Rect *MetroGate = new Rect(12326, 5278, 12526, 5278);
+    Rect *MainGate = new Rect(5406, 7598,5566, 7598);
+
+    //YULU STANDS
+    Sq *YMainGate = new Sq(5666, 7598);
+    LRect *YLHC = new LRect(5056, 5008,5366, 5238);
+    LRect *YHos = new LRect(9746, 2818, 9976, 3008);
+    Rect *YSac = new Rect(11576, 2388,11576, 2498);
+    Rect *YSat = new Rect(9416, 4168, 9536, 4168);
+    LRect *YHim = new LRect(3096, 7528, 3246, 7608); 
+
+    Rect *LHC1 = new Rect(4026, 5268, 4026, 6148);
+    LRect *LHC2 = new LRect(1986, 5988, 4066, 6188);
+    LRect *LHC3 = new LRect(1986, 5188,2546, 6188);
 
     const char* jwala = "JWALAMUKHI";
     const char* nil = "NILGIRI";
@@ -363,6 +380,11 @@ const char* Map::getRegion(int x, int y) {
     const char* sapt = "SAPTAGIRI";
     const char* hospital = "IITD HOSPITAL";
     const char* ML = "MECH LAWN";
+     const char* lechall = "LHC";
+    const char* yulu = "YULU STAND";
+    const char* maingate = "MAIN GATE";
+    const char* metrogate = "METRO GATE";
+    const char* travel = "TRAVELLING...";
 
     if (Jwala->inside(x,y)) {
         return jwala;
@@ -454,8 +476,17 @@ const char* Map::getRegion(int x, int y) {
         return cSAC;
     } else if (CJwl->inside(x,y)){
         return cJwala;
+} else if (LHC1->inside(x,y) || LHC2->inside(x,y) || LHC3->inside(x,y)) {
+        return lechall;
+    } else if (MainGate->inside(x,y)) {
+        return maingate;
+    } else if (MetroGate->inside(x,y)) {
+        return metrogate;
+    } else if (YHim->inside(x,y) || YHos->inside(x,y) || YLHC->inside(x,y) || YMainGate->inside(x,y) || YSac->inside(x,y) || YSat->inside(x,y)) {
+        return yulu;
     } else {
-        return "TRAVELLING...";
-    }
+        return travel;
+    } 
+   
 
 }
