@@ -14,7 +14,7 @@ LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -I /usr/include/SDL2
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME = a.out
 
-all: object npc texture map game main
+all: object npc chance texture map game main
 
 #This is the target that compiles our executable
 
@@ -23,6 +23,9 @@ object	:
 
 npc :
 	g++ -c -Wall -fpic NPC.cpp
+
+chance:
+	g++ -c -Wall -fpic Chance.cpp
 
 texture : 
 	g++ -c -Wall -fpic TM.cpp
@@ -34,4 +37,4 @@ game :
 	g++ -c -Wall -fpic Game.cpp
 
 main : $(OBJS)
-	$(CC) Object.o TM.o Map.o Game.o NPC.o $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+	$(CC) Object.o TM.o Map.o Game.o NPC.o Chance.o $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)

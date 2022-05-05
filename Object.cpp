@@ -151,7 +151,7 @@ Object::Object(const char* texturesheet, int x, int y) {
 //     mCollider.h = 2*srcRect.h;
 // }
 
-void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], int num_NPC) {
+void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], int num_NPC, Chance* activeChance[]) {
     inMotion = true;
     bool isTileCollision = false;
     bool isNPCCollision = false;
@@ -173,6 +173,14 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
                 if (checkCollision(c)) {
                     isNPCCollision = true;
                     activeNPC[j]->onCollision();
+                }
+            }
+
+            for(int k=0;k<2;k++){
+                SDL_Rect d = (activeChance[k]->getCollider());
+                if (checkCollision(d)) {
+                    gotChance = true;
+                    activeChance[k]->onCollision();
                 }
             }
 
@@ -200,6 +208,14 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
                 }
             }
 
+            for(int k=0;k<2;k++){
+                SDL_Rect d = (activeChance[k]->getCollider());
+                if (checkCollision(d)) {
+                    gotChance = true;
+                    activeChance[k]->onCollision();
+                }
+            }
+
             if (checkCollision(b) || isTileCollision) {
                 // cout << "ok..." << endl;
                 ypos -= velocity;
@@ -222,6 +238,15 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
                     activeNPC[j]->onCollision();
                 }
             }
+
+            for(int k=0;k<2;k++){
+                SDL_Rect d = (activeChance[k]->getCollider());
+                if (checkCollision(d)) {
+                    gotChance = true;
+                    activeChance[k]->onCollision();
+                }
+            }
+
             if (checkCollision(b) || isTileCollision) {
                 // cout << "ok..." << endl;
                 xpos += velocity;
@@ -244,6 +269,15 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
                     activeNPC[j]->onCollision();
                 }
             }
+
+            for(int k=0;k<2;k++){
+                SDL_Rect d = (activeChance[k]->getCollider());
+                if (checkCollision(d)) {
+                    gotChance = true;
+                    activeChance[k]->onCollision();
+                }
+            }
+            
             if (checkCollision(b) || isTileCollision) {
                 // cout << "ok..." << endl;
                 xpos -= velocity;

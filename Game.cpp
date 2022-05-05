@@ -4,6 +4,7 @@
 #include "Map.hpp"
 #include "NPC.hpp"
 #include "Tuple.hpp"
+#include "Chance.hpp"
 // #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 #include <string>
@@ -23,7 +24,7 @@ using std::string;
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
-unsigned int tinit,t1,t2,t3,t4;
+unsigned int tinit,t1,t2,t3,t4,t5,t6;
 std::stringstream timeText;
 Uint32 startTime = 0;
 string display = "TRAVELLING...";
@@ -50,6 +51,10 @@ SDL_Renderer *Game::gRenderer = nullptr;
 
 int posIndex = 0;
 Tuple* posArray[20];
+
+int cIndex1 = 0;
+int cIndex2 = 0;
+Tuple* cArray[20]; // Increase this later
 
 // for text
 TTF_Font *gFont = NULL;
@@ -734,6 +739,9 @@ NPC *professor;
 Map *map;
 
 int NUM_ACTIVE_NPC = 0;
+const int NUM_ACTIVE_CHANCE = 2;
+
+Chance* activeChance[NUM_ACTIVE_CHANCE];
 
 SDL_Rect Game::gCamera = {0, 0, 800, 600};
 
@@ -845,7 +853,7 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 	}
 
 	player = new Object("assets/player.png", 12376, 2048);
-	player2 = new Object("assets/player2.png", 12312, 2048);
+	player2 = new Object("assets/player2.png", 9032,4272);
 	professor = new NPC("assets/prof.png", 12350, 1950,"PROF");
 	activeNPC[0] = professor;
 	NUM_ACTIVE_NPC ++;
@@ -875,6 +883,31 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 	posArray[18] = new Tuple(6572, 4592);
 	posArray[19] = new Tuple(8372, 3132);
 	t3 = SDL_GetTicks();
+
+	activeChance[0] = new Chance(12312, 2048);
+	activeChance[1] = new Chance(12350, 1950);
+
+	cArray[0] = new Tuple(12504,5248);
+	cArray[1] = new Tuple(9032,4272);
+	cArray[2] = new Tuple(12504,2880);
+	cArray[3] = new Tuple(5652, 4432);
+	cArray[4] = new Tuple(11472, 4412);
+	cArray[5] = new Tuple(3072, 6932);
+	cArray[6] = new Tuple(7352, 3132);
+	cArray[7] = new Tuple(10112, 3572);
+	cArray[8] = new Tuple(10572, 952);
+	cArray[9] = new Tuple(12412, 4632);
+	cArray[10] = new Tuple(5472, 6872);
+	cArray[11] = new Tuple(12504,5248);
+	cArray[12] = new Tuple(11552, 4632);
+	cArray[13] = new Tuple(7312, 3832);
+	cArray[14] = new Tuple(6072, 4492);
+	cArray[15] = new Tuple(7172, 3852);
+	cArray[16] = new Tuple(5332, 3632);
+	cArray[17] = new Tuple(5372, 1852);
+	cArray[18] = new Tuple(6572, 4592);
+	cArray[19] = new Tuple(8372, 3132);
+	t5 = SDL_GetTicks();
 }
 
 void Game::handleEvent()
@@ -985,25 +1018,25 @@ void Game::handleEvent()
 		SDL_Rect b = (player2->getCollider());
 		switch( e.key.keysym.sym ) {
                 case SDLK_UP:
-                    player->objMove(KEY_PRESS_SURFACE_UP,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC);
+                    player->objMove(KEY_PRESS_SURFACE_UP,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC,activeChance);
 					player->changeFrame(KEY_PRESS_SURFACE_UP);
 					t1 = SDL_GetTicks();
                     break;
 
                 case SDLK_DOWN:
-                    player->objMove(KEY_PRESS_SURFACE_DOWN,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC);
+                    player->objMove(KEY_PRESS_SURFACE_DOWN,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC,activeChance);
                     player->changeFrame(KEY_PRESS_SURFACE_DOWN);
 					t1 = SDL_GetTicks();
 					break;
 
                 case SDLK_LEFT:
-                    player->objMove(KEY_PRESS_SURFACE_LEFT,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC);
+                    player->objMove(KEY_PRESS_SURFACE_LEFT,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC,activeChance);
 					player->changeFrame(KEY_PRESS_SURFACE_LEFT);
 					t1 = SDL_GetTicks();
                     break;
 
                 case SDLK_RIGHT:
-                    player->objMove(KEY_PRESS_SURFACE_RIGHT,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC);
+                    player->objMove(KEY_PRESS_SURFACE_RIGHT,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC,activeChance);
 					player->changeFrame(KEY_PRESS_SURFACE_RIGHT);
 					t1 = SDL_GetTicks();
                     break;
@@ -1114,7 +1147,28 @@ void Game::update()
 	}
 
 	professor->NPCMove(map->Colliders,player->getx(),player->gety());
+
+	t6 = SDL_GetTicks();
+	if (t6-t5>8000){
+		t5 = t6;
+		int min = 0;
+		int max = 19;
+		int range = max - min + 1;
+		
+		cIndex1 = rand()%range + min;
+		cIndex2 = rand()%range + min;
+
+		for(int i=0; i<NUM_ACTIVE_CHANCE; i++) {
+			activeChance[i]->setx(cArray[cIndex1]->fst);
+			activeChance[i]->sety(cArray[cIndex1]->snd);
+		}
+		
+	}
 	professor->objUpdate();
+
+	for(int i=0; i<NUM_ACTIVE_CHANCE; i++) {
+		activeChance[i]->objUpdate();
+	}
 
 	gCamera.x = (player->getx() - 400);
 	gCamera.y = (player->gety() - 300);
@@ -1150,6 +1204,15 @@ void Game::render()
 	// player->objRender();
 	player2->objRender(gCamera.x, gCamera.y);
 	professor->objRender();
+	for(int i=0; i<NUM_ACTIVE_CHANCE; i++) {
+		activeChance[i]->objRender();
+	}
+
+	if(player->gotChance = true) {
+		// Logic for any rendering and stuff ADD HERE
+		player->gotChance = false;
+	} 
+
 	map->DrawplayerOneScore(); // scoreboard over map
 	map->DrawHappinessBarU();
 	map->DrawHappinessBarO();
