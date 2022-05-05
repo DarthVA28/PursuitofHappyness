@@ -27,10 +27,13 @@ const int SCREEN_HEIGHT = 600;
 unsigned int tinit,t1,t2,t3,t4,t5,t6;
 std::stringstream timeText;
 Uint32 startTime = 0;
+Uint32 dispTime = 0;
 string display = "TRAVELLING...";
 string hunger = "00";
 string money = "00";
 string taskDone = "00";
+string messageForPopUp= " ";
+bool toGivePopUp=false;
 
 // Button constants
 const int BUTTON_WIDTH = 300;
@@ -163,6 +166,7 @@ LTexture playSpriteSheetTexture;
 LTexture musicOnSpriteSheetTexture;
 LTexture musicOffSpriteSheetTexture;
 LTexture gTimeTextTexture;
+LTexture gPopUpTextTexture;
 
 // Buttons objects
 LButton gButtons[TOTAL_BUTTONS];
@@ -859,8 +863,8 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 	NUM_ACTIVE_NPC ++;
 	
 	map = new Map();
-	player->addItems("item1");
-	player->addItems("item4");
+
+
 
 	posArray[0] = new Tuple(12504,5248);
 	posArray[1] = new Tuple(9032,4272);
@@ -908,6 +912,11 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 	cArray[18] = new Tuple(6572, 4592);
 	cArray[19] = new Tuple(8372, 3132);
 	t5 = SDL_GetTicks();
+	
+	for(int i = 0; i<5 ; i++)
+	{
+	player->inventoryItems[i] = "";
+	}
 }
 
 void Game::handleEvent()
@@ -1004,6 +1013,11 @@ void Game::handleEvent()
 			{
 				printf( "Unable to render time texture!\n" );
 			}
+	if( !(gPopUpTextTexture.loadFromRenderedText( messageForPopUp, textColor1 ))  )
+			{
+				printf( "Unable to render time texture!\n" );
+			}
+	
 
 	switch (e.type)
 	{
@@ -1073,13 +1087,198 @@ void Game::handleEvent()
 					openMenu2 = false;
 					break;
 				case SDLK_y:
+				if(display == "YULU STAND")
+				{
 					player->Yulu = true;
 					player->toggleYulu();
 					break;
+				}
 				case SDLK_q:
+				if(display == "YULU STAND")
+				{
 					player->Yulu = false;
 					player->toggleYulu();
 					break;
+				}
+				case SDLK_z:                     //to remove
+				
+				
+					player->Yulu = true;
+					player->toggleYulu();
+					break;
+				
+				case SDLK_c:
+				if(display == "HIMADRI CIRCLE")     //himadri circle clothes done
+				{
+				player-> addItems("item1");
+				player->numInventoryItems++;
+				toGivePopUp= true;
+				dispTime= SDL_GetTicks();
+				
+
+				break;
+				}
+				if(display == "JWALAMUKHI")  //hostel done
+				{
+				player-> addItems("item2");
+				toGivePopUp= true;
+				dispTime= SDL_GetTicks();
+				messageForPopUp = "item2 in inventory";
+
+
+				break;
+				}
+				if(display == "SAC")      //sac done
+				{
+				player-> addItems("item3");
+
+
+
+				break;
+				}
+				if(display == "NEW LHC")  
+				{
+				
+				player-> addItems("item4");
+				player->numInventoryItems++;
+
+
+				break;
+				}
+				if(display == "SATPURA")  //shoes done
+				{
+				player-> addItems("item5");
+				player->numInventoryItems++;
+
+
+				break;
+				}
+				if(display == "RAJDHANI")  //lock
+				{
+				player-> addItems("item1");
+				player->numInventoryItems++;
+
+
+				break;
+				}
+				if(display == "METRO GATE")
+				{
+				player-> addItems("item2");
+
+				break;
+				}
+				if(display == "MAIN GATE")
+				{
+				player-> addItems("item3");
+
+				break;
+				}
+				if(display == "CENTRAL LIBRARY")
+				{
+				player-> addItems("item4");
+
+				break;
+				}
+			
+				if(display == "SBI")
+				{
+				player-> addItems("item5");
+				break;
+				}
+				
+				if(display == "Dept Of Design")
+				{
+				player-> addItems("item1");
+				break;
+
+				}
+				if(display == "AMUL")
+				{
+				player-> addItems("item1");
+				break;
+
+				}
+				if(display == "SPORTS GROUNDS")
+				{
+				player-> addItems("item1");
+				break;
+
+				}
+				case SDLK_d:
+				if(display == "HIMADRI CIRCLE")     //himadri circle clothes done
+				{
+				player-> removeItems("item1");
+				break;
+				}
+				if(display == "JWALAMUKHI")  //hostel done
+				{
+				player-> removeItems("item2");
+				break;
+				}
+				if(display == "SAC")      //sac done
+				{
+				player-> removeItems("item3");
+				break;
+				}
+				if(display == "NEW LHC")  
+				{
+				
+				player-> removeItems("item4");
+				break;
+				}
+				if(display == "SATPURA")  //shoes done
+				{
+				player-> removeItems("item5");
+				break;
+				}
+				if(display == "RAJDHANI")  //lock
+				{
+				player-> removeItems("item1");
+				break;
+				}
+				if(display == "METRO GATE")
+				{
+				player-> removeItems("item2");
+				break;
+				}
+				if(display == "MAIN GATE")
+				{
+				player-> removeItems("item3");
+				break;
+				}
+				if(display == "CENTRAL LIBRARY")
+				{
+				player-> removeItems("item4");
+				break;
+				}
+			
+				if(display == "SBI")
+				{
+				player-> removeItems("item5");
+				break;
+				}
+				
+				if(display == "Dept Of Design")
+				{
+				player-> removeItems("item1");
+				break;
+
+				}
+				if(display == "AMUL")
+				{
+				player-> removeItems("item1");
+				break;
+
+				}
+				if(display == "SPORTS GROUNDS")
+				{
+				player-> removeItems("item1");
+				break;
+
+				}
+				
+				
+				
 		// Play high sound effect
 		// case SDLK_1:
 
@@ -1243,7 +1442,7 @@ void Game::render()
 		SDL_Rect fillRect1 = {0, 200, 800, 100}; // task bar over map
 		SDL_SetRenderDrawColor(gRenderer, 192, 192, 192, 0xFF);
 		SDL_RenderFillRect(gRenderer, &fillRect1);
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 5; i++)
 		{
 
 			string s = player->getIElem(player->inventoryItems, i);
@@ -1294,6 +1493,15 @@ void Game::render()
 	gTaskCompletedTexture.render(580, 140); // text over task bar
 
 	gTimeTextTexture.render( 300,50 );
+	if(toGivePopUp)
+	{
+	gPopUpTextTexture.render( 300,300 );
+	if(SDL_GetTicks()- dispTime > 3000)
+	{
+	toGivePopUp= false;;
+	}
+	
+	}
 	if (musicOn)
 	{
 		musicOnButton.renderMusic();
