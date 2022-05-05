@@ -12,7 +12,7 @@ NPC::NPC(const char* texturesheet, int x, int y, string npc_id){
     ypos = y;
     ID = npc_id;
     frame = 0;
-    velocity = 10;
+    velocity = 2;
     renderer = Game::gRenderer;
     objTexture = TM::LoadTexture(texturesheet);
 
@@ -97,9 +97,9 @@ void NPC::NPCMove(Tuple* Colliders[], int xt, int yt){
     int direction = 0;
     bool moved = false;
 
-    if (ypos>yt){
+    if (ypos>yt+32){
         direction = 1;
-    } else if (ypos<yt) {
+    } else if (ypos+32<yt) {
         direction = 2;
     } 
 
@@ -111,9 +111,14 @@ void NPC::NPCMove(Tuple* Colliders[], int xt, int yt){
         } else {
         direction = 4;
         }
+        moved = objMove(direction, Colliders);
+        if (moved) {
+            changeFrame(direction);
+        }
+    } else {
+        changeFrame(direction);
     }
     
-    moved = objMove(direction, Colliders);
 
     if (!moved) {
         direction = 0;
@@ -122,7 +127,22 @@ void NPC::NPCMove(Tuple* Colliders[], int xt, int yt){
     while (!moved && direction <4){
         direction++;
         moved = objMove(direction, Colliders);
+        if (moved) {
+            changeFrame(direction);
+        }
     }
+}
+
+void NPC::objUpdate() {
+    srcRect.h = 32;
+    srcRect.w = 32;
+    srcRect.x = 0;
+    srcRect.y = 0;
+
+    destRect.x = xpos;
+    destRect.y = ypos;
+    destRect.w = 2*srcRect.w;
+    destRect.h = 2*srcRect.h;
 }
 
 bool NPC::objMove(int dir, Tuple* Colliders[]) {
@@ -192,6 +212,7 @@ bool NPC::objMove(int dir, Tuple* Colliders[]) {
             }
             break;
         default:
+            msuccess = false;
             break;
     }
 
@@ -314,5 +335,12 @@ string NPC::getID() {
     return ID;
 }
 
+void NPC::setx(int x){
+    xpos = x;
+}
+
+void NPC::sety(int y){
+    ypos = y;
+}
 
 

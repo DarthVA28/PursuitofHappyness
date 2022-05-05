@@ -26,7 +26,9 @@ public:
     void DrawHappinessBarU();
     void DrawHappinessBarO(); 
     void DrawplayerOneScore();
-    void Drawitems(    string item, int i);
+    void Drawitems(string item, int i);
+    void DrawMenu(string menu);
+
    
     void setColliders();
     void Collisions(int camx, int camy, Object* player);
@@ -37,6 +39,7 @@ private:
     SDL_Rect src,dest;
     SDL_Rect Happysrc,Happydest;
     SDL_Rect itemsrc,itemdest;
+    SDL_Rect menusrc,menudest;
     SDL_Texture* dirt;
     SDL_Texture* grass;
     SDL_Texture* campus;
@@ -48,6 +51,8 @@ private:
     SDL_Texture* item3;
     SDL_Texture* item4;
     SDL_Texture* item5;
+    SDL_Texture* menu1;
+    SDL_Texture* menu2;
 
     int map[MAP_X*MAP_Y];
 };

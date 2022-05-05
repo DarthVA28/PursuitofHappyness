@@ -2,10 +2,13 @@
 #include "TM.hpp"
 #include "Object.hpp"
 #include "Map.hpp"
+#include "NPC.hpp"
 #include "Tuple.hpp"
 // #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 #include <string>
+#include <sstream>
+
 using std::string;
 
 // Mix_Music *gMusic = nullptr;
@@ -20,7 +23,9 @@ using std::string;
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
-unsigned int t1,t2;
+unsigned int tinit,t1,t2,t3,t4;
+std::stringstream timeText;
+Uint32 startTime = 0;
 
 // Button constants
 const int BUTTON_WIDTH = 300;
@@ -31,8 +36,16 @@ bool firstScreen = true;
 bool musicOn = true;
 bool play = true;
 bool openInventory = false;
+bool openTaskSchedule = false;
+bool openMenu1 = false;
+bool openMenu2 = false;
+bool loc1eat = false;
+bool loc2eat = false;
 bool Game ::firstCheck = true;
 SDL_Renderer *Game::gRenderer = nullptr;
+
+int posIndex = 0;
+Tuple* posArray[20];
 
 // for text
 TTF_Font *gFont = NULL;
@@ -138,6 +151,7 @@ LTexture pauseSpriteSheetTexture;
 LTexture playSpriteSheetTexture;
 LTexture musicOnSpriteSheetTexture;
 LTexture musicOffSpriteSheetTexture;
+LTexture gTimeTextTexture;
 
 // Buttons objects
 LButton gButtons[TOTAL_BUTTONS];
@@ -667,7 +681,11 @@ enum KeyPressSurfaces
 
 Object *player;
 Object *player2;
+NPC* activeNPC[10];
+NPC *professor;
 Map *map;
+
+int NUM_ACTIVE_NPC = 0;
 
 SDL_Rect Game::gCamera = {0, 0, 800, 600};
 
@@ -681,6 +699,7 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 	bool success = true;
 	int flags = 0;
 	cnt = w - 128;
+	tinit = SDL_GetTicks();
 	if (fs)
 	{
 		flags = SDL_WINDOW_FULLSCREEN;
@@ -766,10 +785,33 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 	}
 
 	player = new Object("assets/player.png", 12376, 2048);
-	player2 = new Object("assets/p2.png", 12312, 2048);
+	player2 = new Object("assets/player2.png", 12312, 2048);
+	professor = new NPC("assets/prof.png", 12350, 1950,"PROF");
 	map = new Map();
 	player->addItems("item1");
 	player->addItems("item4");
+
+	posArray[0] = new Tuple(12504,5248);
+	posArray[1] = new Tuple(12504,2880);
+	posArray[2] = new Tuple(9032,4272);
+	posArray[3] = new Tuple(5652, 4432);
+	posArray[4] = new Tuple(11472, 4412);
+	posArray[5] = new Tuple(3072, 6932);
+	posArray[6] = new Tuple(7352, 3132);
+	posArray[7] = new Tuple(10112, 3572);
+	posArray[8] = new Tuple(10572, 952);
+	posArray[9] = new Tuple(12412, 4632);
+	posArray[10] = new Tuple(5472, 6872);
+	posArray[11] = new Tuple(12504,5248);
+	posArray[12] = new Tuple(11552, 4632);
+	posArray[13] = new Tuple(7312, 3832);
+	posArray[14] = new Tuple(6072, 4492);
+	posArray[15] = new Tuple(7172, 3852);
+	posArray[16] = new Tuple(5332, 3632);
+	posArray[17] = new Tuple(5372, 1852);
+	posArray[18] = new Tuple(6572, 4592);
+	posArray[19] = new Tuple(8372, 3132);
+	t3 = SDL_GetTicks();
 }
 
 void Game::handleEvent()
@@ -856,6 +898,17 @@ void Game::handleEvent()
 		SDL_RenderPresent(gRenderer);
 	}
 
+	SDL_Color textColor1 = {255, 0, 0};
+	timeText.str( "" );
+	timeText <<  SDL_GetTicks() -startTime ; 
+	string temp = timeText.str();
+	int temp1 = std::stoi(temp)/1000;
+	string temp2 = std::to_string(temp1);
+	if( !gTimeTextTexture.loadFromRenderedText( temp2.c_str(), textColor1 ) )
+			{
+				printf( "Unable to render time texture!\n" );
+			}
+
 	switch (e.type)
 	{
 	case SDL_QUIT:
@@ -891,16 +944,38 @@ void Game::handleEvent()
 					player->changeFrame(KEY_PRESS_SURFACE_RIGHT);
 					t1 = SDL_GetTicks();
                     break;
-		case SDLK_i:
-			printf("6");
-			openInventory = true;
+				case SDLK_i:
 
-			break;
-		case SDLK_o:
+					openInventory = true;
 
-			openInventory = false;
+					break;
+				case SDLK_m:
 
-			break;
+					if(loc1eat)
+					{
+					openMenu1 = true;
+					loc1eat= false;
+					}
+					if(loc2eat)
+					
+					{
+					openMenu2 = true;
+					loc2eat= false;
+					}
+
+					break;
+				case SDLK_t:
+					printf("6");
+					openTaskSchedule = true;
+
+					break;
+				case SDLK_o:
+
+					openInventory = false;
+					openTaskSchedule = false;
+					openMenu1 = false;
+					openMenu2 = false;
+					break;
 		// Play high sound effect
 		// case SDLK_1:
 
@@ -959,10 +1034,22 @@ void Game::update()
 	player->objUpdate();
 	player2->objUpdate();
 
+	t4 = SDL_GetTicks();
+	if (t4-t3 > 10000){
+		t3 = t4;
+		posIndex++;
+		if (posIndex>19){
+			posIndex =0;
+		}
+		professor->setx(posArray[posIndex]->fst);
+		professor->sety(posArray[posIndex]->snd);
+	}
+
+	professor->NPCMove(map->Colliders,player->getx(),player->gety());
+	professor->objUpdate();
+
 	gCamera.x = (player->getx() - 400);
 	gCamera.y = (player->gety() - 300);
-
-	
 
 	if (player->inMotion == false) {
 		t2 = SDL_GetTicks();
@@ -994,6 +1081,7 @@ void Game::render()
 	player->objRender(gCamera.x, gCamera.y); // players over map
 	// player->objRender();
 	player2->objRender(gCamera.x, gCamera.y);
+	professor->objRender();
 	map->DrawplayerOneScore(); // scoreboard over map
 	map->DrawHappinessBarU();
 	map->DrawHappinessBarO();
@@ -1019,7 +1107,47 @@ void Game::render()
 			map->Drawitems(s, i);
 		}
 	}
+		if (openTaskSchedule)
+	{
+
+		SDL_Rect fillRect2 = {200, 200, 300, 300}; // task bar over map
+		SDL_SetRenderDrawColor(gRenderer, 192, 192, 192, 0xFF);
+		SDL_RenderFillRect(gRenderer, &fillRect2);
+		for (int i = 0; i < 2; i++)
+		{
+
+			string s = player->getIElem(player->inventoryItems, i);
+			map->Drawitems(s, i);
+		}
+	}
+		if (openMenu1)
+	{
+
+		SDL_Rect fillRect3 = {200, 200, 300, 300}; // task bar over map
+		SDL_SetRenderDrawColor(gRenderer, 192, 192, 192, 0xFF);
+		SDL_RenderFillRect(gRenderer, &fillRect3);
+		for (int i = 0; i < 2; i++)
+		{
+
+						map->DrawMenu("menu1");
+		}
+	}
+		if (openMenu2)
+	{
+
+		SDL_Rect fillRect4 = {200, 200, 300, 300}; // task bar over map
+		SDL_SetRenderDrawColor(gRenderer, 192, 192, 192, 0xFF);
+		SDL_RenderFillRect(gRenderer, &fillRect4);
+		for (int i = 0; i < 2; i++)
+		{
+
+
+			map->DrawMenu("menu2");
+		}
+	}
 	gTextTexture.render(300, 530); // text over task bar
+
+	gTimeTextTexture.render( 300,50 );
 	if (musicOn)
 	{
 		musicOnButton.renderMusic();

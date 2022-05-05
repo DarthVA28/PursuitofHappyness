@@ -63,6 +63,15 @@ Map::Map() {
     {
     printf("ERROR cant load item5");
     }
+    if(menu1 == NULL)
+    {
+    printf("ERROR cant load menu");
+    }
+          menu2 = TM::LoadTexture("assets/menu2.png");
+    if(menu2 == NULL)
+    {
+    printf("ERROR cant load menu");
+    }
     LoadMap(map1);
     setColliders();
 
@@ -118,6 +127,28 @@ void Map::LoadMap(int arr[Map::MAP_X*Map::MAP_Y]) {
             map[i] = arr[i];
     }
 }
+
+void Map::DrawMenu( string item) {
+    menusrc.x = 0;
+    menusrc.y = 0;
+    menusrc.w = 216;
+    menusrc.h = 233;
+    menudest.x = 250;   
+    menudest.y =230;
+    menudest.w = 250;
+    menudest.h = 250;
+    if((item == "menu1"))
+    {
+    TM::Draw(menu1,itemsrc,itemdest);
+    }
+     if(item == "menu2")
+    {
+    TM::Draw(menu2,itemsrc,itemdest);
+    }
+     
+    
+}
+
 //load happinessBars
 
 

@@ -25,6 +25,8 @@ public:
 
     int getx();
     int gety();
+    void setx(int x);
+    void sety(int y);
     string getID();
 
     SDL_Rect getCollider();

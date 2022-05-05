@@ -34,4 +34,4 @@ game :
 	g++ -c -Wall -fpic Game.cpp
 
 main : $(OBJS)
-	$(CC) Object.o TM.o Map.o Game.o $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+	$(CC) Object.o TM.o Map.o Game.o NPC.o $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)

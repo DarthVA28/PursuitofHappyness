@@ -15,18 +15,24 @@ public:
     void objRender(int camx, int camy);
     void objMove(int dir);
     void objMove(int dir, SDL_Rect b, Tuple* Colliders[]);
+    void addItems(string str);
+    void addTask(string str);
+    void changeFrame(int dir);
+
+    bool inMotion;
     bool checkCollision(SDL_Rect b);
     bool checkTileCollision(int x, int y);
-      string inventoryItems[5];
-     void addItems(string str);
+
+    string inventoryItems[5];
+    string tasks[5];
+
+    int frame;
     int numInventoryItems;
     int getx();
     int gety();
+
     string getIElem(string s[], int i);
     SDL_Rect getCollider();
-    void changeFrame(int dir);
-    bool inMotion;
-    int frame;
 
 private:
 
