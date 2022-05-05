@@ -962,10 +962,12 @@ void Game::update()
 	gCamera.x = (player->getx() - 400);
 	gCamera.y = (player->gety() - 300);
 
+	
+
 	if (player->inMotion == false) {
 		t2 = SDL_GetTicks();
 		if (t2-t1 > 100){
-			player->changeFrame(100);
+			player->frame = 0;
 		}
 	} 
 

@@ -10,7 +10,7 @@ Object::Object(const char* texturesheet, int x, int y) {
     xpos = x;
     ypos = y;
     frame = 0;
-    velocity = 64;
+    velocity = 10;
     renderer = Game::gRenderer;
     objTexture = TM::LoadTexture(texturesheet);
 
@@ -151,6 +151,7 @@ Object::Object(const char* texturesheet, int x, int y) {
 // }
 
 void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
+    inMotion = true;
     bool isTileCollision = false;
     Tuple* tup = new Tuple(0,0);
     switch (dir) {

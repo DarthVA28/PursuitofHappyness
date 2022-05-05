@@ -26,13 +26,13 @@ public:
     SDL_Rect getCollider();
     void changeFrame(int dir);
     bool inMotion;
+    int frame;
 
 private:
 
     int xpos;
     int ypos;
     int velocity;
-    int frame;
 
     SDL_Texture* objTexture;
     SDL_Rect textureSheet[16];
