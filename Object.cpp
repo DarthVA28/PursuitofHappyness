@@ -1,6 +1,7 @@
 #include "Object.hpp"
 #include "TM.hpp"
 #include "Map.hpp"
+#include "NPC.hpp"
 #include <iostream>
 #include <string>
 using namespace std;
@@ -102,7 +103,7 @@ Object::Object(const char* texturesheet, int x, int y) {
 //             ypos -= velocity;
 //             mCollider.y = ypos;
 //             if (checkCollision(b)) {
-//                 cout << "ok..." << endl;
+                // cout << "ok..." << endl;
 //                 ypos += velocity;
 //             }
 //             break;
@@ -110,7 +111,7 @@ Object::Object(const char* texturesheet, int x, int y) {
 //             ypos += velocity;
 //             mCollider.y = ypos;
 //             if (checkCollision(b)) {
-//                 cout << "ok..." << endl;
+                // cout << "ok..." << endl;
 //                 ypos -= velocity;
 //             }
 //             break;
@@ -118,7 +119,7 @@ Object::Object(const char* texturesheet, int x, int y) {
 //             xpos -= velocity;
 //             mCollider.x = xpos;
 //             if (checkCollision(b)) {
-//                 cout << "ok..." << endl;
+                // cout << "ok..." << endl;
 //                 xpos += velocity;
 //             }
 //             break;
@@ -126,7 +127,7 @@ Object::Object(const char* texturesheet, int x, int y) {
 //             xpos += velocity;
 //             mCollider.x = xpos;
 //             if (checkCollision(b)) {
-//                 cout << "ok..." << endl;
+                // cout << "ok..." << endl;
 //                 xpos -= velocity;
 //             }
 //             break;
@@ -150,9 +151,10 @@ Object::Object(const char* texturesheet, int x, int y) {
 //     mCollider.h = 2*srcRect.h;
 // }
 
-void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
+void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], int num_NPC) {
     inMotion = true;
     bool isTileCollision = false;
+    bool isNPCCollision = false;
     Tuple* tup = new Tuple(0,0);
     switch (dir) {
         case 1:
@@ -164,9 +166,18 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                     isTileCollision = true;
                     break;
                 }
-            } 
+            }
+
+            for(int j=0;j<num_NPC;j++){
+                SDL_Rect c = (activeNPC[j]->getCollider());
+                if (checkCollision(c)) {
+                    isNPCCollision = true;
+                    activeNPC[j]->onCollision();
+                }
+            }
+
             if (checkCollision(b) || isTileCollision) {
-                cout << "ok..." << endl;
+                // cout << "ok..." << endl;
                 ypos += velocity;
             }
             break;
@@ -180,8 +191,17 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                     break;
                 }
             } 
+
+            for(int j=0;j<num_NPC;j++){
+                SDL_Rect c = (activeNPC[j]->getCollider());
+                if (checkCollision(c)) {
+                    isNPCCollision = true;
+                    activeNPC[j]->onCollision();
+                }
+            }
+
             if (checkCollision(b) || isTileCollision) {
-                cout << "ok..." << endl;
+                // cout << "ok..." << endl;
                 ypos -= velocity;
             }
             break;
@@ -195,8 +215,15 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                     break;
                 }
             } 
+            for(int j=0;j<num_NPC;j++){
+                SDL_Rect c = (activeNPC[j]->getCollider());
+                if (checkCollision(c)) {
+                    isNPCCollision = true;
+                    activeNPC[j]->onCollision();
+                }
+            }
             if (checkCollision(b) || isTileCollision) {
-                cout << "ok..." << endl;
+                // cout << "ok..." << endl;
                 xpos += velocity;
             }
             break;
@@ -210,8 +237,15 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[]) {
                     break;
                 }
             } 
-            if (checkCollision(b)|| isTileCollision) {
-                cout << "ok..." << endl;
+            for(int j=0;j<num_NPC;j++){
+                SDL_Rect c = (activeNPC[j]->getCollider());
+                if (checkCollision(c)) {
+                    isNPCCollision = true;
+                    activeNPC[j]->onCollision();
+                }
+            }
+            if (checkCollision(b) || isTileCollision) {
+                // cout << "ok..." << endl;
                 xpos -= velocity;
             }
             break;
@@ -365,7 +399,7 @@ bool Object::checkTileCollision(int x, int y) {
         } else if( leftA >= rightB ) {
             return false;
         } else {
-            cout << "Collision2" << endl;
+            // cout << "Collision2" << endl;
             return true;
         }
 }

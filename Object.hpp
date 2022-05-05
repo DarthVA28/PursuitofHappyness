@@ -1,6 +1,7 @@
 #pragma once
 #include "Game.hpp"
 #include "Tuple.hpp"
+#include "NPC.hpp"
 #include <string>
 
 using std::string;
@@ -14,7 +15,7 @@ public:
     void objRender();
     void objRender(int camx, int camy);
     void objMove(int dir);
-    void objMove(int dir, SDL_Rect b, Tuple* Colliders[]);
+    void objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], int num_NPC);
     void addItems(string str);
     void addTask(string str);
     void changeFrame(int dir);

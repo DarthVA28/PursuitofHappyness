@@ -12,7 +12,7 @@ NPC::NPC(const char* texturesheet, int x, int y, string npc_id){
     ypos = y;
     ID = npc_id;
     frame = 0;
-    velocity = 2;
+    velocity = 1;
     renderer = Game::gRenderer;
     objTexture = TM::LoadTexture(texturesheet);
 
@@ -280,7 +280,7 @@ bool NPC::checkTileCollision(int x, int y) {
         } else if( leftA >= rightB ) {
             return false;
         } else {
-            cout << "Collision2" << endl;
+            // cout << "Collision2" << endl;
             return true;
         }
 }
@@ -343,4 +343,9 @@ void NPC::sety(int y){
     ypos = y;
 }
 
+void NPC::onCollision(){
+    xpos = 0;
+    ypos = 0;
+    // Some logic for scoring here...
+}
 

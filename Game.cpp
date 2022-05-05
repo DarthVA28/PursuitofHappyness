@@ -26,6 +26,10 @@ const int SCREEN_HEIGHT = 600;
 unsigned int tinit,t1,t2,t3,t4;
 std::stringstream timeText;
 Uint32 startTime = 0;
+string display = "TRAVELLING...";
+string hunger = "00";
+string money = "00";
+string taskDone = "00";
 
 // Button constants
 const int BUTTON_WIDTH = 300;
@@ -49,6 +53,7 @@ Tuple* posArray[20];
 
 // for text
 TTF_Font *gFont = NULL;
+TTF_Font *gFont1 = NULL;
 
 enum LButtonSprite
 {
@@ -83,6 +88,7 @@ public:
 #if defined(SDL_TTF_MAJOR_VERSION)
 	// Creates image from font string
 	bool loadFromRenderedText(std::string textureText, SDL_Color textColor);
+	bool loadFromRenderedText1(std::string textureText, SDL_Color textColor);
 #endif
 
 	// Deallocates texture
@@ -289,6 +295,41 @@ bool LTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor
 	// Return success
 	return mTexture != NULL;
 }
+
+bool LTexture::loadFromRenderedText1(std::string textureText, SDL_Color textColor)
+{
+	// Get rid of preexisting texture
+	free();
+
+	// Render text surface
+	SDL_Surface *textSurface1 = TTF_RenderText_Solid(gFont1, textureText.c_str(), textColor);
+	if (textSurface1 == NULL)
+	{
+		printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
+	}
+	else
+	{
+		// Create texture from surface pixels
+		mTexture = SDL_CreateTextureFromSurface(Game::gRenderer, textSurface1);
+		if (mTexture == NULL)
+		{
+			printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
+		}
+		else
+		{
+			// Get image dimensions
+			mWidth = textSurface1->w;
+			mHeight = textSurface1->h;
+		}
+
+		// Get rid of old surface
+		SDL_FreeSurface(textSurface1);
+	}
+
+	// Return success
+	return mTexture != NULL;
+}
+
 #endif
 
 void LTexture::free()
@@ -552,31 +593,38 @@ LTexture gPromptTexture;
 
 // Rendered texture
 LTexture gTextTexture;
+LTexture gHungerTexture;
+LTexture gMoneyTexture;
+LTexture gTaskCompletedTexture;
 bool loadTextMedia()
 {
 	// Loading success flag
 	bool success = true;
 
-	// Open the font
-	gFont = TTF_OpenFont("assets/lazy.ttf", 28);
-	if (gFont == NULL)
+	// Render text
+	SDL_Color textColor = {0, 0, 0};
+	if (!gTextTexture.loadFromRenderedText(display, textColor))
 	{
-		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+		printf("Failed to render text texture!\n");
 		success = false;
 	}
-	else
+	if (!gHungerTexture.loadFromRenderedText1("HUNGER: " + hunger, textColor))
 	{
-		// Render text
-		SDL_Color textColor = {0, 0, 0};
-		if (!gTextTexture.loadFromRenderedText("SLUTPURA", textColor))
-		{
-			printf("Failed to render text texture!\n");
-			success = false;
-		}
+		printf("Failed to render text texture!\n");
+		success = false;
+	}if (!gMoneyTexture.loadFromRenderedText1("MONEY: "+ money, textColor))
+	{
+		printf("Failed to render text texture!\n");
+		success = false;
+	}if (!gTaskCompletedTexture.loadFromRenderedText1("TASKS DONE: " + taskDone, textColor))
+	{
+		printf("Failed to render text texture!\n");
+		success = false;
 	}
 
 	return success;
 }
+
 //-----------------------------------START SCREEN---------------------------------------------
 bool loadMedia()
 {
@@ -767,6 +815,18 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 					printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
 					success = false;
 				}
+
+				gFont = TTF_OpenFont("assets/lazy.ttf", 28);
+				gFont1 = TTF_OpenFont("assets/lazy.ttf", 22);
+				if (gFont == NULL)
+				{
+					printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+				}
+				if (gFont1 == NULL)
+				{
+					printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+				}
+
 				if (!loadTextMedia())
 				{
 					printf("Failed to load text media for taskbar!\n");
@@ -787,13 +847,16 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 	player = new Object("assets/player.png", 12376, 2048);
 	player2 = new Object("assets/player2.png", 12312, 2048);
 	professor = new NPC("assets/prof.png", 12350, 1950,"PROF");
+	activeNPC[0] = professor;
+	NUM_ACTIVE_NPC ++;
+	
 	map = new Map();
 	player->addItems("item1");
 	player->addItems("item4");
 
 	posArray[0] = new Tuple(12504,5248);
-	posArray[1] = new Tuple(12504,2880);
-	posArray[2] = new Tuple(9032,4272);
+	posArray[1] = new Tuple(9032,4272);
+	posArray[2] = new Tuple(12504,2880);
 	posArray[3] = new Tuple(5652, 4432);
 	posArray[4] = new Tuple(11472, 4412);
 	posArray[5] = new Tuple(3072, 6932);
@@ -922,25 +985,25 @@ void Game::handleEvent()
 		SDL_Rect b = (player2->getCollider());
 		switch( e.key.keysym.sym ) {
                 case SDLK_UP:
-                    player->objMove(KEY_PRESS_SURFACE_UP,b,map->Colliders);
+                    player->objMove(KEY_PRESS_SURFACE_UP,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC);
 					player->changeFrame(KEY_PRESS_SURFACE_UP);
 					t1 = SDL_GetTicks();
                     break;
 
                 case SDLK_DOWN:
-                    player->objMove(KEY_PRESS_SURFACE_DOWN,b,map->Colliders);
+                    player->objMove(KEY_PRESS_SURFACE_DOWN,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC);
                     player->changeFrame(KEY_PRESS_SURFACE_DOWN);
 					t1 = SDL_GetTicks();
 					break;
 
                 case SDLK_LEFT:
-                    player->objMove(KEY_PRESS_SURFACE_LEFT,b,map->Colliders);
+                    player->objMove(KEY_PRESS_SURFACE_LEFT,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC);
 					player->changeFrame(KEY_PRESS_SURFACE_LEFT);
 					t1 = SDL_GetTicks();
                     break;
 
                 case SDLK_RIGHT:
-                    player->objMove(KEY_PRESS_SURFACE_RIGHT,b,map->Colliders);
+                    player->objMove(KEY_PRESS_SURFACE_RIGHT,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC);
 					player->changeFrame(KEY_PRESS_SURFACE_RIGHT);
 					t1 = SDL_GetTicks();
                     break;
@@ -1033,6 +1096,11 @@ void Game::update()
 {
 	player->objUpdate();
 	player2->objUpdate();
+	display = (string) (map->getRegion(player->getx(),player->gety()));
+	if (!loadTextMedia())
+				{
+					printf("Failed to load text media for taskbar!\n");
+				}
 
 	t4 = SDL_GetTicks();
 	if (t4-t3 > 10000){
@@ -1146,6 +1214,9 @@ void Game::render()
 		}
 	}
 	gTextTexture.render(300, 530); // text over task bar
+	gHungerTexture.render(580, 90); // text over task bar
+	gMoneyTexture.render(580, 115); // text over task bar
+	gTaskCompletedTexture.render(580, 140); // text over task bar
 
 	gTimeTextTexture.render( 300,50 );
 	if (musicOn)

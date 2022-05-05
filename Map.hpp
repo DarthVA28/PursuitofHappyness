@@ -32,7 +32,7 @@ public:
    
     void setColliders();
     void Collisions(int camx, int camy, Object* player);
-    string getRegion(int x, int y);
+    const char* getRegion(int x, int y);
 
 private: 
 

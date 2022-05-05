@@ -247,7 +247,7 @@ void Map::Collisions(int camx, int camy, Object* player){
 }
 
 
-string Map::getRegion(int x, int y) {
+const char* Map::getRegion(int x, int y) {
     /* Region cases */
 
     // HOSTELS
@@ -318,98 +318,144 @@ string Map::getRegion(int x, int y) {
     Sq *CSac = new Sq(11552, 3092);
     Sq *CJwl = new Sq(12412, 4632);
 
+    const char* jwala = "JWALAMUKHI";
+    const char* nil = "NILGIRI";
+    const char* ara = "ARAVALI";
+    const char* kara = "KARAKORAM";
+    const char* araNM = "ARAVALI NIGHT MESS";
+    const char* Himadri = "HIMADRI";
+    const char* kailash = "KAILASH";
+    const char* girnar = "GIRNAR";
+    const char* udaigiri = "UDAIGIRI";
+    const char* shivalik = "SHIVALIK";
+    const char* vindy = "VINDYANCHAL";
+    const char* satpura = "SATPURA";
+    const char* Zansy = "ZANSKAR";
+    const char* cumaon = "KUMAON";
+    const char* cJwala = "JWALA CIRCLE";
+    const char* cSAC = "SAC CIRCLE";
+    const char* cVindy = "VINDY CIRCLE";
+    const char* cHim = "HIMADRI CIRCLE";
+    const char* csc = "CSC";
+    const char* NewLHC = "NEW LHC";
+    const char* sac = "SAC";
+    const char* dod = "Dept Of Design";
+    const char* textile = "TEXTILE DEPT";
+    const char* nal = "NALANDA";
+    const char* staff = "STAFF CANTEEN";
+    const char* cLib = "CENTRAL LIBRARY";
+    const char* Libent = "LIBRARY ENTRANCE";
+    const char* parking = "VISITOR PARKING";
+    const char* grounds = "SPORTS GROUNDS";
+    const char* nescafe = "NESCAFE";
+    const char* shiru = "SHIRU CAFE";
+    const char* amul1 = "AMUL";
+    const char* sit = "SCHOOL OF IT";
+    const char* chayoos = "CHAYOOS";
+    const char* rajdhani = "RAJDHANI";
+    const char* MM = "MASALA MIX";
+    const char* sbi= "SBI";
+    const char* exhall = "EXHALL";
+    const char* bhartiB = "BHARTI BUILDING";
+    const char* redSq = "RED SQUARE";
+    const char* mainBuild = "MAIN BUILDING";
+    const char* BBLAWN = " BIOTECH LAWNS";
+    const char* sapt = "SAPTAGIRI";
+    const char* hospital = "IITD HOSPITAL";
+    const char* ML = "MECH LAWN";
+
     if (Jwala->inside(x,y)) {
-        return "JWALAMUKHI";
+        return jwala;
     } else if (Ara->inside(x,y)){
-        return "ARAVALI";
+        return ara;
     } else if (Kara->inside(x,y)){
-        return "KARAKORAM";
+        return kara;
     } else if (Nilgiri->inside(x,y)){
-        return "NILGIRI";
+        return nil;
     } else if (AraNM->inside(x,y)){
-        return "ARAVALI NIGHT MESS";
+        return araNM;
     } else if (Satpura1->inside(x,y) || Satpura2->inside(x,y) || Satpura3->inside(x,y)) {
-        return "SATPURA";
+        return satpura;
     } else if (Kum1->inside(x,y) || Kum2->inside(x,y)) {
-        return "KUMAON";
+        return cumaon;
     } else if (Vindy1->inside(x,y) || Vindy2->inside(x,y)) {
-        return "VINDYANCHAL";
+        return vindy;
     } else if (Shiva->inside(x,y)) {
-        return "SHIVALIK";
+        return shivalik;
     } else if (Zan1->inside(x,y) || Zan2->inside(x,y)){
-        return "ZANSKAR";
+        return Zansy;
     } else if (Girnar->inside(x,y)){
-        return "GIRNAR";
+        return girnar;
     } else if (Udai->inside(x,y)){
-        return "UDAIGIRI";
+        return udaigiri;
     } else if (Sapt->inside(x,y)){
-        return "SAPTAGIRI";
+        return sapt;
     } else if (Kailash->inside(x,y)){
-        return "KAILASH";
+        return kailash;
     } else if (Him->inside(x,y)){
-        return "HIMADRI";
+        return Himadri;
     } else if (NewLHC1->inside(x,y) || NewLHC2->inside(x,y)){
-        return "NEW LHC";
+        return NewLHC;
     } else if (Textile->inside(x,y)){
-        return "TEXTILE DEPT.";
+        return textile;
     } else if (DOD->inside(x,y)){
-        return "DEPT. OF DESIGN";
+        return dod;
     } else if (SBI->inside(x,y)){
-        return "SBI";
+        return sbi;
     } else if (Nal->inside(x,y)){
-        return "NALANDA APARTMENTS";
+        return nal;
     } else if (Staff->inside(x,y)){
-        return "STAFF CANTEEN";
+        return staff;
     } else if (Lib1->inside(x,y) || Lib2->inside(x,y)){
-        return "CENTRAL LIBRARY";
+        return cLib;
     } else if (LibEnt->inside(x,y)){
-        return "LIBRARY ENTRANCE";
+        return Libent;
     } else if (Nescafe->inside(x,y)){
-        return "NESCAFE";
+        return nescafe;
     } else if (Amul1->inside(x,y) || Amul2->inside(x,y)){
-        return "AMUL";
+        return amul1;
     } else if (Shiru->inside(x,y)){
-        return "SHIRU CAFE";
+        return shiru;
     } else if (Exhall->inside(x,y)){
-        return "EXHALL";
+        return exhall;
     } else if (SIT->inside(x,y)){
-        return "SCHOOL OF IT";
+        return sit;
     } else if (Bharti2->inside(x,y) || Bharti1->inside(x,y)){
-        return "BHARTI BUILDING";
+        return bhartiB;
     } else if (Hospital->inside(x,y)){
-        return "IITD HOSPITAL";
+        return hospital;
     } else if (MasalaMix->inside(x,y)){
-        return "MASALA MIX";
+        return MM;
     } else if (Chaayos->inside(x,y)){
-        return "CHAAYOS";
+        return chayoos;
     } else if (Rajdhani->inside(x,y)){
-        return "RAJDHANI";
+        return rajdhani;
     } else if (RedSq->inside(x,y)){
-        return "RED SQUARE";
+        return redSq;
     } else if (MainB->inside(x,y)){
-        return "MAIN BUILDING";
+        return mainBuild;
     } else if (Biotech->inside(x,y)){
-        return "BIOTECH LAWNS";
+        return BBLAWN;
     } else if (MLawn->inside(x,y)){
-        return "MECH LAWN";
+        return ML;
     } else if (CSC->inside(x,y)){
-        return "IITD CSC";
+        return csc;
     } else if (SAC->inside(x,y)){
-        return "SAC";
+        return sac;
     } else if (Parking->inside(x,y)){
-        return "VISITOR PARKING";
+        return parking;
     } else if (Grounds->inside(x,y)){
-        return "SPORTS GROUNDS";
+        return grounds;
     } else if (CVin->inside(x,y)){
-        return "VINDY CIRCLE";
+        return cVindy;
     } else if (CHim->inside(x,y)){
-        return "HIMADRI CIRCLE";
+        return cHim;
     } else if (CSac->inside(x,y)){
-        return "SAC CIRCLE";
+        return cSAC;
     } else if (CJwl->inside(x,y)){
-        return "JWALA CIRCLE";
+        return cJwala;
     } else {
-        return "";
+        return "TRAVELLING...";
     }
 
 }
