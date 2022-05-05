@@ -12,10 +12,11 @@ Object::Object(const char* texturesheet, int x, int y) {
     ypos = y;
     frame = 0;
     velocity = 10;
+    Yulu = false;
     renderer = Game::gRenderer;
     objTexture = TM::LoadTexture(texturesheet);
 
-    for(int i=0;i<11;i++){
+    for(int i=0;i<24;i++){
         SDL_Rect* a = new SDL_Rect;
         textureSheet[i] = *a;
     }
@@ -74,6 +75,71 @@ Object::Object(const char* texturesheet, int x, int y) {
     textureSheet[10].y = 64;
     textureSheet[10].w = 32;
     textureSheet[10].h = 32;
+
+    textureSheet[11].x = 96;
+    textureSheet[11].y = 64;
+    textureSheet[11].w = 32;
+    textureSheet[11].h = 32;
+
+    textureSheet[12].x = 0;
+    textureSheet[12].y = 32*3;
+    textureSheet[12].w = 32;
+    textureSheet[12].h = 32;
+
+    textureSheet[13].x = 32;
+    textureSheet[13].y = 32*3;
+    textureSheet[13].w = 32;
+    textureSheet[13].h = 32;
+
+    textureSheet[14].x = 64;
+    textureSheet[14].y = 32*3;
+    textureSheet[14].w = 32;
+    textureSheet[14].h = 32;
+
+    textureSheet[15].x = 0;
+    textureSheet[15].y = 32*4;
+    textureSheet[15].w = 32;
+    textureSheet[15].h = 32;
+
+    textureSheet[16].x = 32;
+    textureSheet[16].y = 32*4;
+    textureSheet[16].w = 32;
+    textureSheet[16].h = 32;
+
+    textureSheet[17].x = 64;
+    textureSheet[17].y = 32*4;
+    textureSheet[17].w = 32;
+    textureSheet[17].h = 32;
+
+    textureSheet[18].x = 0;
+    textureSheet[18].y = 32*5;
+    textureSheet[18].w = 32;
+    textureSheet[18].h = 32;
+
+    textureSheet[19].x = 32;
+    textureSheet[19].y = 32*5;
+    textureSheet[19].w = 32;
+    textureSheet[19].h = 32;
+
+    textureSheet[20].x = 64;
+    textureSheet[20].y = 32*5;
+    textureSheet[20].w = 32;
+    textureSheet[20].h = 32;
+
+    textureSheet[21].x = 0;
+    textureSheet[21].y = 32*6;
+    textureSheet[21].w = 32;
+    textureSheet[21].h = 32;
+
+    textureSheet[22].x = 32;
+    textureSheet[22].y = 32*6;
+    textureSheet[22].w = 32;
+    textureSheet[22].h = 32;
+
+    textureSheet[23].x = 64;
+    textureSheet[23].y = 32*6;
+    textureSheet[23].w = 32;
+    textureSheet[23].h = 32;
 
     srcRect.h = 32;
     srcRect.w = 32;
@@ -277,7 +343,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
                     activeChance[k]->onCollision();
                 }
             }
-            
+
             if (checkCollision(b) || isTileCollision) {
                 // cout << "ok..." << endl;
                 xpos -= velocity;
@@ -358,10 +424,18 @@ void Object::objRender(int camx, int camy) {
     destRect.y = ypos - Game::gCamera.y;
     destRect.w = 2*srcRect.w;
     destRect.h = 2*srcRect.h;
-    if (frame>=0 && frame <=10){
-        SDL_RenderCopy(renderer,objTexture,&textureSheet[frame],&destRect);
+    if (!Yulu) {
+        if (frame>=0 && frame <=10){
+            SDL_RenderCopy(renderer,objTexture,&textureSheet[frame],&destRect);
+        } else {
+            cout << "ERROR: " << "The value of the frame is " << frame << endl;
+        } 
     } else {
-        cout << "ERROR: " << "The value of the frame is " << frame << endl;
+        if (frame>=12 && frame <=23){
+            SDL_RenderCopy(renderer,objTexture,&textureSheet[frame],&destRect);
+        } else {
+            cout << "ERROR: " << "The value of the frame is " << frame << endl;
+        } 
     }
 }
 
@@ -470,35 +544,77 @@ void Object::addItems( string str)
 
 
 void Object::changeFrame(int dir) {
-    if (dir==1) {
-        if (frame<2){
-            frame++;
+    if (!Yulu){
+        if (dir==1) {
+            if (frame<2){
+                frame++;
+            } else {
+                frame = 0;
+            }
+        } else if (dir==2){
+            if (frame<2){
+                frame++;
+            } else {
+                frame = 0;
+            }
+        } else if (dir==3){
+            if (frame>=7 && frame<10){
+                frame++;
+            } else {
+                frame = 7;
+            }
+        } else if (dir==4){
+            if (frame>=3 && frame<6){
+                frame++;
+            } else {
+                frame = 3;
+            }
         } else {
-            frame = 0;
-        }
-    } else if (dir==2){
-        if (frame<2){
-            frame++;
-        } else {
-            frame = 0;
-        }
-    } else if (dir==3){
-        if (frame>=7 && frame<10){
-            frame++;
-        } else {
-            frame = 7;
-        }
-    } else if (dir==4){
-        if (frame>=3 && frame<6){
-            frame++;
-        } else {
-            frame = 3;
+            if (frame<2){
+                frame++;
+            } else {
+                frame = 0;
+            }
         }
     } else {
-        if (frame<2){
-            frame++;
+        if (dir==2) {
+            if (frame>=18 && frame<20){
+                frame++;
+            } else {
+                frame = 18;
+            }
+        } else if (dir==1){
+            if (frame>=21 && frame<23){
+                frame++;
+            } else {
+                frame = 21;
+            }
+        } else if (dir==3){
+            if (frame>=12 && frame<14){
+                frame++;
+            } else {
+                frame = 12;
+            }
+        } else if (dir==4){
+            if (frame>=15 && frame<17){
+                frame++;
+            } else {
+                frame = 15;
+            }
         } else {
-            frame = 0;
+            frame = 18;
         }
+    }
+}
+
+void Object::toggleYulu(){
+    if (Yulu) {
+        cout << "Yulu activated!" << endl;
+        velocity = 40;
+        frame = 18;
+    } else {
+        cout << "Yulu deactivated!" << endl;
+        velocity = 10;
+        frame = 0;
     }
 }

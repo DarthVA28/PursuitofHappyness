@@ -20,9 +20,11 @@ public:
     void addItems(string str);
     void addTask(string str);
     void changeFrame(int dir);
+    void toggleYulu();
 
     bool inMotion;
     bool gotChance;
+    bool Yulu;
     bool checkCollision(SDL_Rect b);
     bool checkTileCollision(int x, int y);
 
@@ -44,7 +46,7 @@ private:
     int velocity;
 
     SDL_Texture* objTexture;
-    SDL_Rect textureSheet[16];
+    SDL_Rect textureSheet[24];
     SDL_Rect srcRect, destRect;
     SDL_Renderer* renderer;
 

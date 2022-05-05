@@ -1072,6 +1072,14 @@ void Game::handleEvent()
 					openMenu1 = false;
 					openMenu2 = false;
 					break;
+				case SDLK_y:
+					player->Yulu = true;
+					player->toggleYulu();
+					break;
+				case SDLK_q:
+					player->Yulu = false;
+					player->toggleYulu();
+					break;
 		// Play high sound effect
 		// case SDLK_1:
 
@@ -1176,7 +1184,11 @@ void Game::update()
 	if (player->inMotion == false) {
 		t2 = SDL_GetTicks();
 		if (t2-t1 > 100){
-			player->frame = 0;
+			if (!(player->Yulu)) {
+				player->frame = 0;
+			} else {
+				player->frame = 18;
+			}
 		}
 	} 
 
@@ -1208,7 +1220,7 @@ void Game::render()
 		activeChance[i]->objRender();
 	}
 
-	if(player->gotChance = true) {
+	if(player->gotChance == true) {
 		// Logic for any rendering and stuff ADD HERE
 		player->gotChance = false;
 	} 
