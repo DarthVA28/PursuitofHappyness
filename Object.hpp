@@ -18,6 +18,7 @@ public:
     void objMove(int dir);
     void objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], int num_NPC, Chance* activeChance[]);
     void addItems(string str);
+    void removeItems(string str);
     void addTask(string str);
     void changeFrame(int dir);
     void toggleYulu();
