@@ -9,6 +9,7 @@ using std::string;
 Object::Object(const char* texturesheet, int x, int y) {
     xpos = x;
     ypos = y;
+    frame = 0;
     velocity = 64;
     renderer = Game::gRenderer;
     objTexture = TM::LoadTexture(texturesheet);
@@ -288,7 +289,11 @@ void Object::objRender(int camx, int camy) {
     destRect.y = ypos - Game::gCamera.y;
     destRect.w = 2*srcRect.w;
     destRect.h = 2*srcRect.h;
-    SDL_RenderCopy(renderer,objTexture,&textureSheet[frame],&destRect);
+    if (frame>=0 && frame <=10){
+        SDL_RenderCopy(renderer,objTexture,&textureSheet[frame],&destRect);
+    } else {
+        cout << "ERROR: " << "The value of the frame is " << frame << endl;
+    }
 }
 
 bool Object::checkCollision(SDL_Rect b) {
