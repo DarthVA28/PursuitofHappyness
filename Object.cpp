@@ -541,6 +541,18 @@ void Object::addItems( string str)
     {
     return s[i];
     }
+void Object::removeItems( string str)
+
+{
+	for(int i =0; i < 5; i++)
+	{
+			if(inventoryItems[i] == str)
+			{
+			inventoryItems[i] = "";
+			break;
+			}
+	}
+}
 
 
 void Object::changeFrame(int dir) {
