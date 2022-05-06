@@ -20,12 +20,13 @@ public:
     void objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], int num_NPC, Chance* activeChance[], PowerUp* activePUPS[]);
     void addItems(string str);
     void addPowerUps(string str);
-    void removeItems(string str);
+    bool removeItems(string str);
     void removeTasks(string str);
     void removePowerUps(string str);
     void addTasks(string str);
     void changeFrame(int dir);
     void toggleYulu();
+    void updateHappyness();
     void objTeleport(int location);
     void randomTeleport(int location);
 
@@ -43,6 +44,10 @@ public:
     int numInventoryItems;
     int getx();
     int gety();
+    int getHappyness();
+    string hunger ;
+    string money ;
+    string taskDone ;
     int activePowerUp;
 
     string getIElem(string s[], int i);
@@ -53,6 +58,7 @@ private:
     int xpos;
     int ypos;
     int velocity;
+    int happyness; //from pursuit of Happyness
 
     SDL_Texture* objTexture;
     SDL_Rect textureSheet[24];
