@@ -15,7 +15,7 @@ Object::Object(const char* texturesheet, int x, int y) {
     velocity = 10;
     Yulu = false;
     gotChance = false;
-    activePowerUp = 0;
+    activePowerUp = -1;
     renderer = Game::gRenderer;
     objTexture = TM::LoadTexture(texturesheet);
 
@@ -689,5 +689,71 @@ void Object::toggleYulu(){
         cout << "Yulu deactivated!" << endl;
         velocity = 10;
         frame = 0;
+    }
+}
+
+void Object::objTeleport(int location){
+    switch(location){
+        case 0: //Jwala
+            xpos = 12504;
+            ypos = 5248;
+            break;
+        case 1:
+            xpos = 11576;
+            ypos = 2388;
+            break;
+        case 2:
+            xpos = 3072;
+            ypos = 6932;
+            break;
+        case 3:
+            xpos = 10112;
+            ypos = 3572;
+            break;
+        default:
+            break;
+    }
+}
+
+void Object::randomTeleport(int location){
+    switch(location){
+        case 0:
+            xpos = 4432;
+            ypos = 6792;
+            break;
+        case 1:
+            xpos = 5292;
+            ypos = 6172;
+            break;
+        case 2:
+            xpos = 6072;
+            ypos = 4492;
+            break;
+        case 3:
+            xpos = 8372;
+            ypos = 3132;
+            break;
+        case 4:
+            xpos = 11212;
+            ypos = 3332;
+            break;
+        case 5:
+            xpos = 9972;
+            ypos = 2772;
+            break;
+        case 6:
+            xpos = 11472;
+            ypos = 4532;
+            break;
+        case 7:
+            xpos = 3072;
+            ypos = 7492;
+            break;
+        case 8:
+            xpos = 5406;
+            ypos = 7598;
+            break;
+        default:
+            break;
     }
 }

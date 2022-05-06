@@ -51,6 +51,7 @@ bool openMenu2 = false;
 bool loc1eat = false;
 bool loc2eat = false;
 bool openTaskSheet = false;
+bool openTeleportMenu = false;
 bool Game ::firstCheck = true;
 SDL_Renderer *Game::gRenderer = nullptr;
 
@@ -173,6 +174,7 @@ LTexture musicOffSpriteSheetTexture;
 LTexture gTimeTextTexture;
 LTexture gPopUpTextTexture;
 LTexture gTaskTextTexture;
+LTexture gTeleportTextTexture;
 
 // Buttons objects
 LButton gButtons[TOTAL_BUTTONS];
@@ -866,12 +868,80 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 
 	player = new Object("assets/player.png", 12376, 2048);
 	player2 = new Object("assets/player2.png", 9032,4272);
+
+	string taskarray[16];
+	taskarray[0] = "SAC MEETING: Bring laptop from hostel.";
+	taskarray[1] = "SAC MEETING: Fix rec room key at Rajdhani.";
+	taskarray[2] = "CSC FASHION SHOW: Bring snacks from Metro Gate.";
+	taskarray[3] = "CSC FASHION SHOW: Get clothes from Himadri Circle";
+	taskarray[4] = "LHC SPONSOR EVENT: Get cash from SBI";
+	taskarray[5] = "LHC SPONSOR EVENT: Call freshers from Library";
+	taskarray[6] = "RED SQUARE: Bring camera from SAC";
+	taskarray[7] = "RED SQUARE: Fetch water from Amul";
+	taskarray[8] = "MECH LAWN BRCA: Get snacks from Main Gate";
+	taskarray[9] = "MECH LAWN BRCA: Bring camera from SAC";
+	taskarray[10] = "NALANDA BIKING: Get cones from sports ground";
+	taskarray[11] = "NALANDA BIKING: Borrow shoes from Satpura";
+	taskarray[12] = "PRONITE: Get passes from LHC";
+	taskarray[13] = "PRONITE: Fix pendant at Dep. of Design";
+	taskarray[14] = "EAT LUNCH";
+	taskarray[15] = "EAT LUNCH";
+
+	int min = 0;
+	int max = 15;
+	int range = max - min + 1;
+
+	int assigned1[5];
+	int assigned2[5];
+
+	for(int i=0; i<4; i++) {
+		int idx = 0;
+		bool unique = false;
+		while (!unique){
+			idx = rand()%range + min;
+			unique = true;
+			for(int j = 0; j<i; j++) {
+				if (assigned1[j] == idx){
+					unique = false;
+				}
+			}
+		}
+		assigned1[i] = idx;
+		player->addTasks(taskarray[idx]);
+	}
+
+	player->addTasks(taskarray[14]);
+
+	for(int i=0; i<4; i++) {
+		int idx = 0;
+		bool unique = false;
+		while (!unique){
+			idx = rand()%range + min;
+			unique = true;
+			for(int j = 0; j<i; j++) {
+				if (assigned2[j] == idx){
+					unique = false;
+				}
+			}
+			for(int k=0; k<5; k++){
+				if (assigned1[k] == idx){
+					unique = false;
+				}
+			}
+		}
+		assigned2[i] = idx;
+		player2->addTasks(taskarray[idx]);
+	}
+		
+	player2->addTasks(taskarray[15]);
+
 	player->addTasks("hi1");
 	player->addTasks("hi1");
 	player->addTasks("hi1");
 	player->addTasks("hi1");
 	player->addTasks("hi1");
-	player-> addPowerUps("hammer");
+	
+	// player-> addPowerUps("hammer");
 	player-> addPowerUps("hammer");
 	professor = new NPC("assets/prof.png", 12350, 1950,"PROF");
 	activeNPC[0] = professor;
@@ -926,11 +996,11 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 	cArray[19] = new Tuple(8372, 3132);
 	t5 = SDL_GetTicks();
 
-	activePUPS[0] = new PowerUp(0,12312, 2016);
-	activePUPS[1] = new PowerUp(1, 5332, 3632);
+	activePUPS[0] = new PowerUp(1,12312, 2016);
+	activePUPS[1] = new PowerUp(0, 5332, 3632);
 	activePUPS[2] = new PowerUp(1, 8372, 3132);
 	activePUPS[3] = new PowerUp(1, 3072, 6932);
-	activePUPS[4] = new PowerUp(2, 10112, 3572);
+	activePUPS[4] = new PowerUp(2, 5332, 3632);
 
 	pArray[0] = new Tuple(12504,5248);
 	pArray[1] = new Tuple(9032,4272);
@@ -1129,6 +1199,7 @@ void Game::handleEvent()
 
 					openInventory = false;
 					openTaskSchedule = false;
+					openTeleportMenu = false;
 					openMenu1 = false;
 					openMenu2 = false;
 					break;
@@ -1319,9 +1390,42 @@ void Game::handleEvent()
 				break;
 
 				}
+				
 				break;
-				
-				
+
+				case SDLK_x:
+					if (display=="BHARTI BUILDING"){
+						openTeleportMenu = true;
+					}
+				break;
+
+				case SDLK_0:
+					if (display=="BHARTI BUILDING"){
+						openTeleportMenu = false;
+						player->objTeleport(0);
+					}
+					break;
+
+				case SDLK_1:
+					if (display=="BHARTI BUILDING"){
+						openTeleportMenu = false;
+						player->objTeleport(1);
+					}
+					break;
+
+				case SDLK_2:
+					if (display=="BHARTI BUILDING"){
+						openTeleportMenu = false;
+						player->objTeleport(2);
+					}
+					break;
+
+				case SDLK_3:
+					if (display=="BHARTI BUILDING"){
+						openTeleportMenu = false;
+						player->objTeleport(3);
+					}
+					break;
 				
 		// Play high sound effect
 		// case SDLK_1:
@@ -1495,9 +1599,16 @@ void Game::render()
 		activePUPS[i]->objRender();
 	}
 
-	if(player->activePowerUp != 0) {
+	if(player->activePowerUp != -1) {
+		if (player->activePowerUp == 0) {
+			player->addPowerUps("hammer");
+		} else if (player->activePowerUp == 1) {
+			player->addPowerUps("phone");
+		} else {
+			player->addPowerUps("teleporter");
+		}
 		// Logic for any rendering and stuff ADD HERE
-		player->activePowerUp = 0;
+		player->activePowerUp = -1;
 	} 
 
 	if(player->gotChance == true) {
@@ -1548,6 +1659,7 @@ void Game::render()
 			gTaskTextTexture.render(270, 240 +40*i);
 		}
 	}
+
 		if (openMenu1)
 	{
 
@@ -1573,6 +1685,31 @@ void Game::render()
 			map->DrawMenu("menu2");
 		
 	}
+
+	if (openTeleportMenu){
+			SDL_Rect fillRect5 = {250, 200, 300, 300}; // task bar over map
+			SDL_SetRenderDrawColor(gRenderer, 192, 192, 192, 0xFF);
+			SDL_RenderFillRect(gRenderer, &fillRect5);
+			SDL_Color textColor2 = {255, 0, 0};
+			for (int i = 0; i < 4; i++)
+			{
+				string s;
+				if (i==0){
+					s = "Press 0 for Jwalamukhi";
+				} else if (i==1){
+					s = "Press 1 for SAC";
+				} else if (i==2){
+					s = "Press 2 for Himadri";
+				} else {
+					s = "Press 3 for Rajdhani";
+				}
+					if( !(gTeleportTextTexture.loadFromRenderedText( s, textColor2 ))  )
+				{
+					printf( "Unable to render teleport texture!\n" );
+				}
+				gTeleportTextTexture.render(270, 240 +40*i);
+			}
+		}
 	gTextTexture.render(300, 530); // text over task bar
 	gHungerTexture.render(580, 90); // text over task bar
 	gMoneyTexture.render(580, 115); // text over task bar

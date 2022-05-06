@@ -26,6 +26,8 @@ public:
     void addTasks(string str);
     void changeFrame(int dir);
     void toggleYulu();
+    void objTeleport(int location);
+    void randomTeleport(int location);
 
     bool inMotion;
     bool gotChance;
