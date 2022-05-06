@@ -49,6 +49,7 @@ bool openMenu1 = false;
 bool openMenu2 = false;
 bool loc1eat = false;
 bool loc2eat = false;
+bool openTaskSheet = false;
 bool Game ::firstCheck = true;
 SDL_Renderer *Game::gRenderer = nullptr;
 
@@ -167,6 +168,7 @@ LTexture musicOnSpriteSheetTexture;
 LTexture musicOffSpriteSheetTexture;
 LTexture gTimeTextTexture;
 LTexture gPopUpTextTexture;
+LTexture gTaskTextTexture;
 
 // Buttons objects
 LButton gButtons[TOTAL_BUTTONS];
@@ -858,6 +860,13 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 
 	player = new Object("assets/player.png", 12376, 2048);
 	player2 = new Object("assets/player2.png", 9032,4272);
+	player->addTasks("hi1");
+	player->addTasks("hi1");
+	player->addTasks("hi1");
+	player->addTasks("hi1");
+	player->addTasks("hi1");
+	player-> addPowerUps("hammer");
+	player-> addPowerUps("hammer");
 	professor = new NPC("assets/prof.png", 12350, 1950,"PROF");
 	activeNPC[0] = professor;
 	NUM_ACTIVE_NPC ++;
@@ -1017,7 +1026,8 @@ void Game::handleEvent()
 			{
 				printf( "Unable to render time texture!\n" );
 			}
-	
+			
+
 
 	switch (e.type)
 	{
@@ -1059,6 +1069,7 @@ void Game::handleEvent()
 					openInventory = true;
 
 					break;
+	
 				case SDLK_m:
 
 					if(loc1eat)
@@ -1091,21 +1102,18 @@ void Game::handleEvent()
 				{
 					player->Yulu = true;
 					player->toggleYulu();
-					break;
+					
 				}
+				break;
 				case SDLK_q:
 				if(display == "YULU STAND")
 				{
 					player->Yulu = false;
 					player->toggleYulu();
-					break;
+					
 				}
-				case SDLK_z:                     //to remove
-				
-				
-					player->Yulu = true;
-					player->toggleYulu();
-					break;
+				break;
+			
 				
 				case SDLK_c:
 				if(display == "HIMADRI CIRCLE")     //himadri circle clothes done
@@ -1276,6 +1284,7 @@ void Game::handleEvent()
 				break;
 
 				}
+				break;
 				
 				
 				
@@ -1405,6 +1414,15 @@ void Game::update()
 	// if( gCamera.y > 32*(map->MAP_Y) - gCamera.h ) {
 	//     gCamera.y = (map->MAP_Y) - gCamera.h;
 	// }
+	string temp = timeText.str();
+	int temp1 = std::stoi(temp)/10;
+	//string temp2 = std::to_string(temp1);
+	if(temp1 % 600 ==0)
+	{
+	int i = std::stoi(hunger);
+	i+=1;
+	hunger = std::to_string( i);
+	}
 }
 
 void Game::render()
@@ -1452,14 +1470,19 @@ void Game::render()
 		if (openTaskSchedule)
 	{
 
-		SDL_Rect fillRect2 = {200, 200, 300, 300}; // task bar over map
+		SDL_Rect fillRect2 = {250, 200, 300, 300}; // task bar over map
 		SDL_SetRenderDrawColor(gRenderer, 192, 192, 192, 0xFF);
 		SDL_RenderFillRect(gRenderer, &fillRect2);
-		for (int i = 0; i < 2; i++)
+		SDL_Color textColor2 = {255, 0, 0};
+		for (int i = 0; i < 5; i++)
 		{
 
-			string s = player->getIElem(player->inventoryItems, i);
-			map->Drawitems(s, i);
+			string s = player->getIElem(player->tasks, i);
+				if( !(gTaskTextTexture.loadFromRenderedText( s, textColor2 ))  )
+			{
+				printf( "Unable to render time texture!\n" );
+			}
+			gTaskTextTexture.render(270, 240 +40*i);
 		}
 	}
 		if (openMenu1)
@@ -1468,11 +1491,11 @@ void Game::render()
 		SDL_Rect fillRect3 = {200, 200, 300, 300}; // task bar over map
 		SDL_SetRenderDrawColor(gRenderer, 192, 192, 192, 0xFF);
 		SDL_RenderFillRect(gRenderer, &fillRect3);
-		for (int i = 0; i < 2; i++)
-		{
+		
+		
 
 						map->DrawMenu("menu1");
-		}
+		
 	}
 		if (openMenu2)
 	{
@@ -1480,17 +1503,24 @@ void Game::render()
 		SDL_Rect fillRect4 = {200, 200, 300, 300}; // task bar over map
 		SDL_SetRenderDrawColor(gRenderer, 192, 192, 192, 0xFF);
 		SDL_RenderFillRect(gRenderer, &fillRect4);
-		for (int i = 0; i < 2; i++)
-		{
+		
+		
 
 
 			map->DrawMenu("menu2");
-		}
+		
 	}
 	gTextTexture.render(300, 530); // text over task bar
 	gHungerTexture.render(580, 90); // text over task bar
 	gMoneyTexture.render(580, 115); // text over task bar
 	gTaskCompletedTexture.render(580, 140); // text over task bar
+	for (int i =0; i<2;i++)
+	{
+	string s =player->getIElem(player->powerUps,i);
+	map->DrawPowerUps(s,i);
+	
+	}
+	
 
 	gTimeTextTexture.render( 300,50 );
 	if(toGivePopUp)
