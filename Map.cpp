@@ -17,7 +17,7 @@ Map::Map() {
     dirt = TM::LoadTexture("assets/dirt.png");
     grass = TM::LoadTexture("assets/grass.png");
     
-    campus = TM::LoadTexture("assets/campusv3.png");
+    campus = TM::LoadTexture("assets/campusv2.png");
     if(campus == NULL)
     {
     printf("ERROR cant load image of campus");
@@ -63,6 +63,7 @@ Map::Map() {
     {
     printf("ERROR cant load item5");
     }
+              menu1 = TM::LoadTexture("assets/menu1.png");
     if(menu1 == NULL)
     {
     printf("ERROR cant load menu");
@@ -72,6 +73,22 @@ Map::Map() {
     {
     printf("ERROR cant load menu");
     }
+              hammer = TM::LoadTexture("assets/hammer.png");
+    if(hammer == NULL)
+    {
+    printf("ERROR cant load hammer");
+    }
+              phone = TM::LoadTexture("assets/phone.png");
+    if(phone == NULL)
+    {
+    printf("ERROR cant load phone");
+    }
+              teleport = TM::LoadTexture("assets/item4.png");
+    if(teleport == NULL)
+    {
+    printf("ERROR cant load teleport");
+    }
+    
     LoadMap(map1);
     setColliders();
 
@@ -207,6 +224,31 @@ void Map::Drawitems( string item, int i) {
      if(item == "item5")
     {
     TM::Draw(item5,itemsrc,itemdest);
+    }
+    
+    
+}
+
+void Map::DrawPowerUps( string powerUp, int i) {
+    powerUpsrc.x = 0;
+    powerUpsrc.y = 0;
+    powerUpsrc.w = 216;
+    powerUpsrc.h = 233;
+    powerUpdest.x = 0 + 74*i;   
+    powerUpdest.y =518;
+    powerUpdest.w = 64;
+    powerUpdest.h = 64;
+if((powerUp == "phone"))
+    {
+    TM::Draw(phone,powerUpsrc,powerUpdest);
+    }
+     if(powerUp == "hammer")
+    {
+    TM::Draw(hammer,powerUpsrc,powerUpdest);
+    }
+     if(powerUp == "teleport")
+    {
+    TM::Draw(teleport,powerUpsrc,powerUpdest);
     }
     
     
