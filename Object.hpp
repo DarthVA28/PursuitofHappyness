@@ -2,6 +2,7 @@
 #include "Game.hpp"
 #include "Tuple.hpp"
 #include "NPC.hpp"
+#include "PowerUp.hpp"
 #include "Chance.hpp"
 #include <string>
 
@@ -16,7 +17,7 @@ public:
     void objRender();
     void objRender(int camx, int camy);
     void objMove(int dir);
-    void objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], int num_NPC, Chance* activeChance[]);
+    void objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], int num_NPC, Chance* activeChance[], PowerUp* activePUPS[]);
     void addItems(string str);
     void addPowerUps(string str);
     void removeItems(string str);
@@ -40,6 +41,7 @@ public:
     int numInventoryItems;
     int getx();
     int gety();
+    int activePowerUp;
 
     string getIElem(string s[], int i);
     SDL_Rect getCollider();

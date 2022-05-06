@@ -3,6 +3,7 @@
 #include "Object.hpp"
 #include "Map.hpp"
 #include "NPC.hpp"
+#include "PowerUp.hpp"
 #include "Tuple.hpp"
 #include "Chance.hpp"
 // #include <SDL2/SDL_mixer.h>
@@ -24,7 +25,7 @@ using std::string;
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
-unsigned int tinit,t1,t2,t3,t4,t5,t6;
+unsigned int tinit,t1,t2,t3,t4,t5,t6,t7,t8;
 std::stringstream timeText;
 Uint32 startTime = 0;
 Uint32 dispTime = 0;
@@ -59,6 +60,9 @@ Tuple* posArray[20];
 int cIndex1 = 0;
 int cIndex2 = 0;
 Tuple* cArray[20]; // Increase this later
+
+int pIndex = 0;
+Tuple* pArray[50]; // Increase this later
 
 // for text
 TTF_Font *gFont = NULL;
@@ -746,8 +750,10 @@ Map *map;
 
 int NUM_ACTIVE_NPC = 0;
 const int NUM_ACTIVE_CHANCE = 2;
+const int NUM_ACTIVE_PUPS = 5;
 
 Chance* activeChance[NUM_ACTIVE_CHANCE];
+PowerUp* activePUPS[NUM_ACTIVE_PUPS];
 
 SDL_Rect Game::gCamera = {0, 0, 800, 600};
 
@@ -873,8 +879,6 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 	
 	map = new Map();
 
-
-
 	posArray[0] = new Tuple(12504,5248);
 	posArray[1] = new Tuple(9032,4272);
 	posArray[2] = new Tuple(12504,2880);
@@ -921,6 +925,37 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 	cArray[18] = new Tuple(6572, 4592);
 	cArray[19] = new Tuple(8372, 3132);
 	t5 = SDL_GetTicks();
+
+	activePUPS[0] = new PowerUp(0,12312, 2016);
+	activePUPS[1] = new PowerUp(1, 5332, 3632);
+	activePUPS[2] = new PowerUp(1, 8372, 3132);
+	activePUPS[3] = new PowerUp(1, 3072, 6932);
+	activePUPS[4] = new PowerUp(2, 10112, 3572);
+
+	pArray[0] = new Tuple(12504,5248);
+	pArray[1] = new Tuple(9032,4272);
+	pArray[2] = new Tuple(12504,2880);
+	pArray[3] = new Tuple(5652, 4432);
+	pArray[4] = new Tuple(11472, 4412);
+	pArray[5] = new Tuple(3072, 6932);
+	pArray[6] = new Tuple(7352, 3132);
+	pArray[7] = new Tuple(10112, 3572);
+	pArray[8] = new Tuple(10572, 952);
+	pArray[9] = new Tuple(12412, 4632);
+	pArray[10] = new Tuple(5472, 6872);
+	pArray[11] = new Tuple(12504,5248);
+	pArray[12] = new Tuple(11552, 4632);
+	pArray[13] = new Tuple(7312, 3832);
+	pArray[14] = new Tuple(6072, 4492);
+	pArray[15] = new Tuple(7172, 3852);
+	pArray[16] = new Tuple(5332, 3632);
+	pArray[17] = new Tuple(5372, 1852);
+	pArray[18] = new Tuple(6572, 4592);
+	pArray[19] = new Tuple(8372, 3132);
+	for(int r=20; r<50; r++) {
+		pArray[r] = new Tuple(0,0);
+	}
+	t7 = SDL_GetTicks();
 	
 	for(int i = 0; i<5 ; i++)
 	{
@@ -1042,25 +1077,25 @@ void Game::handleEvent()
 		SDL_Rect b = (player2->getCollider());
 		switch( e.key.keysym.sym ) {
                 case SDLK_UP:
-                    player->objMove(KEY_PRESS_SURFACE_UP,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC,activeChance);
+                    player->objMove(KEY_PRESS_SURFACE_UP,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC,activeChance,activePUPS);
 					player->changeFrame(KEY_PRESS_SURFACE_UP);
 					t1 = SDL_GetTicks();
                     break;
 
                 case SDLK_DOWN:
-                    player->objMove(KEY_PRESS_SURFACE_DOWN,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC,activeChance);
+                    player->objMove(KEY_PRESS_SURFACE_DOWN,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC,activeChance,activePUPS);
                     player->changeFrame(KEY_PRESS_SURFACE_DOWN);
 					t1 = SDL_GetTicks();
 					break;
 
                 case SDLK_LEFT:
-                    player->objMove(KEY_PRESS_SURFACE_LEFT,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC,activeChance);
+                    player->objMove(KEY_PRESS_SURFACE_LEFT,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC,activeChance,activePUPS);
 					player->changeFrame(KEY_PRESS_SURFACE_LEFT);
 					t1 = SDL_GetTicks();
                     break;
 
                 case SDLK_RIGHT:
-                    player->objMove(KEY_PRESS_SURFACE_RIGHT,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC,activeChance);
+                    player->objMove(KEY_PRESS_SURFACE_RIGHT,b,map->Colliders,activeNPC,NUM_ACTIVE_NPC,activeChance,activePUPS);
 					player->changeFrame(KEY_PRESS_SURFACE_RIGHT);
 					t1 = SDL_GetTicks();
                     break;
@@ -1370,21 +1405,40 @@ void Game::update()
 		int min = 0;
 		int max = 19;
 		int range = max - min + 1;
-		
-		cIndex1 = rand()%range + min;
-		cIndex2 = rand()%range + min;
 
 		for(int i=0; i<NUM_ACTIVE_CHANCE; i++) {
+			cIndex1 = rand()%range + min;
 			activeChance[i]->setx(cArray[cIndex1]->fst);
 			activeChance[i]->sety(cArray[cIndex1]->snd);
 		}
 		
 	}
+
+	t8 = SDL_GetTicks();
+	if (t8-t7>8000){
+		t7 = t8;
+		int min = 0;
+		int max = 49;
+		int range = max - min + 1;
+
+		for(int i=0; i<NUM_ACTIVE_PUPS; i++) {
+			pIndex = rand()%range + min;
+			activePUPS[i]->setx(pArray[pIndex]->fst);
+			activePUPS[i]->sety(pArray[pIndex]->snd);
+		}
+		
+	}
+
 	professor->objUpdate();
 
 	for(int i=0; i<NUM_ACTIVE_CHANCE; i++) {
 		activeChance[i]->objUpdate();
 	}
+
+	for(int i=0; i<NUM_ACTIVE_PUPS; i++) {
+		activePUPS[i]->objUpdate();
+	}
+
 
 	gCamera.x = (player->getx() - 400);
 	gCamera.y = (player->gety() - 300);
@@ -1436,6 +1490,15 @@ void Game::render()
 	for(int i=0; i<NUM_ACTIVE_CHANCE; i++) {
 		activeChance[i]->objRender();
 	}
+
+	for(int i=0; i<NUM_ACTIVE_PUPS; i++) {
+		activePUPS[i]->objRender();
+	}
+
+	if(player->activePowerUp != 0) {
+		// Logic for any rendering and stuff ADD HERE
+		player->activePowerUp = 0;
+	} 
 
 	if(player->gotChance == true) {
 		// Logic for any rendering and stuff ADD HERE

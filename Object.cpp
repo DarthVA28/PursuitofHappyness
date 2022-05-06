@@ -2,6 +2,7 @@
 #include "TM.hpp"
 #include "Map.hpp"
 #include "NPC.hpp"
+#include "PowerUp.hpp"
 #include <iostream>
 #include <string>
 using namespace std;
@@ -13,6 +14,8 @@ Object::Object(const char* texturesheet, int x, int y) {
     frame = 0;
     velocity = 10;
     Yulu = false;
+    gotChance = false;
+    activePowerUp = 0;
     renderer = Game::gRenderer;
     objTexture = TM::LoadTexture(texturesheet);
 
@@ -217,7 +220,7 @@ Object::Object(const char* texturesheet, int x, int y) {
 //     mCollider.h = 2*srcRect.h;
 // }
 
-void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], int num_NPC, Chance* activeChance[]) {
+void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], int num_NPC, Chance* activeChance[], PowerUp* activePUPS[]) {
     inMotion = true;
     bool isTileCollision = false;
     bool isNPCCollision = false;
@@ -247,6 +250,14 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
                 if (checkCollision(d)) {
                     gotChance = true;
                     activeChance[k]->onCollision();
+                }
+            }
+
+            for(int l=0;l<5;l++){
+                SDL_Rect e = (activePUPS[l]->getCollider());
+                if (checkCollision(e)) {
+                    activePowerUp = (activePUPS[l]->getID());
+                    activePUPS[l]->onCollision();
                 }
             }
 
@@ -282,6 +293,14 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
                 }
             }
 
+            for(int l=0;l<5;l++){
+                SDL_Rect e = (activePUPS[l]->getCollider());
+                if (checkCollision(e)) {
+                    activePowerUp = (activePUPS[l]->getID());
+                    activePUPS[l]->onCollision();
+                }
+            }
+
             if (checkCollision(b) || isTileCollision) {
                 // cout << "ok..." << endl;
                 ypos -= velocity;
@@ -313,6 +332,14 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
                 }
             }
 
+            for(int l=0;l<5;l++){
+                SDL_Rect e = (activePUPS[l]->getCollider());
+                if (checkCollision(e)) {
+                    activePowerUp = (activePUPS[l]->getID());
+                    activePUPS[l]->onCollision();
+                }
+            }
+
             if (checkCollision(b) || isTileCollision) {
                 // cout << "ok..." << endl;
                 xpos += velocity;
@@ -341,6 +368,14 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
                 if (checkCollision(d)) {
                     gotChance = true;
                     activeChance[k]->onCollision();
+                }
+            }
+
+            for(int l=0;l<5;l++){
+                SDL_Rect e = (activePUPS[l]->getCollider());
+                if (checkCollision(e)) {
+                    activePowerUp = (activePUPS[l]->getID());
+                    activePUPS[l]->onCollision();
                 }
             }
 
