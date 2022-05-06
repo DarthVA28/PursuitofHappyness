@@ -30,9 +30,10 @@ std::stringstream timeText;
 Uint32 startTime = 0;
 Uint32 dispTime = 0;
 string display = "TRAVELLING...";
-string hunger = "00";
-string money = "00";
-string taskDone = "00";
+string Hunger;
+string Money;
+string TaskDone;
+
 string messageForPopUp= " ";
 bool toGivePopUp=false;
 
@@ -51,8 +52,25 @@ bool openMenu2 = false;
 bool loc1eat = false;
 bool loc2eat = false;
 bool openTaskSheet = false;
-bool openTeleportMenu = false;
 bool Game ::firstCheck = true;
+bool fixKey = false;
+bool bringLaptop= false;
+bool bringCSCrefreshments = false;
+bool clothesCSC = false;
+bool sponsorCash = false;
+bool faccheForSponsor = false;
+bool cameraForBRCA = false;
+bool refreshmentsForBRCA = false;
+bool cameraForRedSq = false;
+bool waterForRedSq = false;
+bool shoesForNalanda = false;
+bool conesForNalanda = false;
+bool pendantForPronite = false;
+bool passesForPronite = false;
+bool lunch = false;
+bool openTeleportMenu = false;
+
+
 SDL_Renderer *Game::gRenderer = nullptr;
 
 int posIndex = 0;
@@ -625,19 +643,20 @@ bool loadTextMedia()
 		printf("Failed to render text texture!\n");
 		success = false;
 	}
-	if (!gHungerTexture.loadFromRenderedText1("HUNGER: " + hunger, textColor))
+	if (!gHungerTexture.loadFromRenderedText1("HUNGER: " + Hunger, textColor))
 	{
 		printf("Failed to render text texture!\n");
 		success = false;
-	}if (!gMoneyTexture.loadFromRenderedText1("MONEY: "+ money, textColor))
+	}if (!gMoneyTexture.loadFromRenderedText1("MONEY: "+ Money, textColor))
 	{
 		printf("Failed to render text texture!\n");
 		success = false;
-	}if (!gTaskCompletedTexture.loadFromRenderedText1("TASKS DONE: " + taskDone, textColor))
+	}if (!gTaskCompletedTexture.loadFromRenderedText1("TASKS DONE: " + TaskDone, textColor))
 	{
 		printf("Failed to render text texture!\n");
 		success = false;
 	}
+
 
 	return success;
 }
@@ -935,14 +954,11 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 		
 	player2->addTasks(taskarray[15]);
 
-	player->addTasks("hi1");
-	player->addTasks("hi1");
-	player->addTasks("hi1");
-	player->addTasks("hi1");
-	player->addTasks("hi1");
+
+	
 	
 	// player-> addPowerUps("hammer");
-	player-> addPowerUps("hammer");
+	//player-> addPowerUps("hammer");
 	professor = new NPC("assets/prof.png", 12350, 1950,"PROF");
 	activeNPC[0] = professor;
 	NUM_ACTIVE_NPC ++;
@@ -996,7 +1012,7 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 	cArray[19] = new Tuple(8372, 3132);
 	t5 = SDL_GetTicks();
 
-	activePUPS[0] = new PowerUp(1,12312, 2016);
+	activePUPS[0] = new PowerUp(2,12312, 2016);
 	activePUPS[1] = new PowerUp(0, 5332, 3632);
 	activePUPS[2] = new PowerUp(1, 8372, 3132);
 	activePUPS[3] = new PowerUp(1, 3072, 6932);
@@ -1031,6 +1047,12 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 	{
 	player->inventoryItems[i] = "";
 	}
+	player->hunger = "00";
+	player->money = "1000";
+	player->taskDone = "00";
+	Hunger = player->hunger;
+	Money = player->money;
+	TaskDone = player->taskDone;
 }
 
 void Game::handleEvent()
@@ -1224,27 +1246,30 @@ void Game::handleEvent()
 				case SDLK_c:
 				if(display == "HIMADRI CIRCLE")     //himadri circle clothes done
 				{
-				player-> addItems("item1");
+				player-> addItems("clothes");
 				player->numInventoryItems++;
 				toGivePopUp= true;
 				dispTime= SDL_GetTicks();
-				
+				messageForPopUp = "clothes in inventory";	
 
 				break;
 				}
 				if(display == "JWALAMUKHI")  //hostel done
 				{
-				player-> addItems("item2");
+				player-> addItems("laptop");
 				toGivePopUp= true;
 				dispTime= SDL_GetTicks();
-				messageForPopUp = "item2 in inventory";
+				messageForPopUp = "laptop in inventory";
 
 
 				break;
 				}
 				if(display == "SAC")      //sac done
 				{
-				player-> addItems("item3");
+				player-> addItems("camera");
+				toGivePopUp= true;
+				dispTime= SDL_GetTicks();
+				messageForPopUp = "camera in inventory";				
 
 
 
@@ -1253,145 +1278,256 @@ void Game::handleEvent()
 				if(display == "NEW LHC")  
 				{
 				
-				player-> addItems("item4");
-				player->numInventoryItems++;
+				player-> addItems("passes");
+				toGivePopUp= true;
+				dispTime= SDL_GetTicks();
+				messageForPopUp = "passes in inventory";
 
 
 				break;
 				}
 				if(display == "SATPURA")  //shoes done
 				{
-				player-> addItems("item5");
-				player->numInventoryItems++;
+				player-> addItems("shoes");
+				toGivePopUp= true;
+				dispTime= SDL_GetTicks();
+				messageForPopUp = "shoes in inventory";
 
 
 				break;
 				}
 				if(display == "RAJDHANI")  //lock
 				{
-				player-> addItems("item1");
-				player->numInventoryItems++;
+				player-> addItems("key");
+				toGivePopUp= true;
+				dispTime= SDL_GetTicks();
+				messageForPopUp = "key in inventory";
 
 
 				break;
 				}
 				if(display == "METRO GATE")
 				{
-				player-> addItems("item2");
+				player-> addItems("refreshments");
+				toGivePopUp= true;
+				dispTime= SDL_GetTicks();
+				messageForPopUp = "refreshments in inventory";
 
 				break;
 				}
 				if(display == "MAIN GATE")
 				{
-				player-> addItems("item3");
+				player-> addItems("refreshmentsmain");
+				toGivePopUp= true;
+				dispTime= SDL_GetTicks();
+				messageForPopUp = "refreshments in inventory";
 
 				break;
 				}
 				if(display == "CENTRAL LIBRARY")
 				{
-				player-> addItems("item4");
+				player-> addItems("facche");
+				toGivePopUp= true;
+				dispTime= SDL_GetTicks();
+				messageForPopUp = "captured newbies in inventory";
 
 				break;
 				}
 			
 				if(display == "SBI")
 				{
-				player-> addItems("item5");
+				player-> addItems("cash");
+				toGivePopUp= true;
+				dispTime= SDL_GetTicks();
+				messageForPopUp = "cash in inventory";
 				break;
 				}
 				
 				if(display == "Dept Of Design")
 				{
-				player-> addItems("item1");
+				player-> addItems("pendant");
+				toGivePopUp= true;
+				dispTime= SDL_GetTicks();
+				messageForPopUp = "pendant in inventory";
 				break;
 
 				}
 				if(display == "AMUL")
 				{
-				player-> addItems("item1");
+				player-> addItems("water");
+				toGivePopUp= true;
+				dispTime= SDL_GetTicks();
+				messageForPopUp = "water in inventory";
 				break;
 
 				}
 				if(display == "SPORTS GROUNDS")
 				{
-				player-> addItems("item1");
+				player-> addItems("cones");
+				toGivePopUp= true;
+				dispTime= SDL_GetTicks();
+				messageForPopUp = "cones in inventory";
 				break;
 
 				}
+				
+				
+				
+				
 				case SDLK_d:
-				if(display == "HIMADRI CIRCLE")     //himadri circle clothes done
-				{
-				player-> removeItems("item1");
-				break;
-				}
-				if(display == "JWALAMUKHI")  //hostel done
-				{
-				player-> removeItems("item2");
-				break;
-				}
+			
+		
+				
+				
 				if(display == "SAC")      //sac done
 				{
-				player-> removeItems("item3");
+				if(player-> removeItems("laptop"))
+				{
+				bringLaptop = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				}
+				if(player-> removeItems("key")){
+				fixKey = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				
+				}
 				break;
 				}
+				
+				
 				if(display == "NEW LHC")  
 				{
 				
-				player-> removeItems("item4");
+				if(player-> removeItems("facche"))
+				{
+				faccheForSponsor = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				}
+				if(player-> removeItems("cash"))
+				{
+				sponsorCash = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				}
 				break;
 				}
-				if(display == "SATPURA")  //shoes done
+				
+				
+				if(display == "MECH LAWNS")
 				{
-				player-> removeItems("item5");
+					if(player-> removeItems("camera"))
+					
+				{
+				cameraForBRCA = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				}
+					if(player-> removeItems("refreshmentsmain"))
+				{
+				refreshmentsForBRCA = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				}
+				
+				if(display == "RED SQUARE")
+				{
+					if(player-> removeItems("camera"))
+				{
+				cameraForRedSq = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				}
+					if(player-> removeItems("water"))
+				{
+				waterForRedSq = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				}	
 				break;
 				}
-				if(display == "RAJDHANI")  //lock
+		
+				if(display == "NALNADA")
 				{
-				player-> removeItems("item1");
-				break;
+					if(player-> removeItems("cones"))
+				{
+				conesForNalanda = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
 				}
-				if(display == "METRO GATE")
+					if(player-> removeItems("shoes"))
 				{
-				player-> removeItems("item2");
-				break;
-				}
-				if(display == "MAIN GATE")
-				{
-				player-> removeItems("item3");
-				break;
-				}
-				if(display == "CENTRAL LIBRARY")
-				{
-				player-> removeItems("item4");
+				shoesForNalanda = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				}	
 				break;
 				}
 			
-				if(display == "SBI")
-				{
-				player-> removeItems("item5");
-				break;
-				}
 				
-				if(display == "Dept Of Design")
-				{
-				player-> removeItems("item1");
-				break;
-
-				}
-				if(display == "AMUL")
-				{
-				player-> removeItems("item1");
-				break;
-
-				}
 				if(display == "SPORTS GROUNDS")
 				{
-				player-> removeItems("item1");
+				if(player-> removeItems("passes"))
+				{
+				passesForPronite = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				}
+				if(player-> removeItems("pendant"))
+				{
+				pendantForPronite = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				}
 				break;
 
 				}
 				
+				
+				if(display == "CSC")
+				{
+				if(player-> removeItems("refreshments"))
+				{
+				bringCSCrefreshments = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				}
+				if(player-> removeItems("clothes"))
+				{
+				clothesCSC = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				}
 				break;
+				}
+				
+				if(display == "STAFF CANTEEN")
+				{
+				lunch = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				}
+				break;
+				
+				
+				
 
 				case SDLK_x:
 					if (display=="BHARTI BUILDING"){
@@ -1478,6 +1614,7 @@ void Game::handleEvent()
 	}
 	musicOnButton.handleEvent(&e);
 	musicOffButton.handleEvent(&e);
+}
 }
 
 void Game::update()
@@ -1577,9 +1714,26 @@ void Game::update()
 	//string temp2 = std::to_string(temp1);
 	if(temp1 % 600 ==0)
 	{
-	int i = std::stoi(hunger);
+	int i = std::stoi(player->hunger);
 	i+=1;
-	hunger = std::to_string( i);
+	player->hunger = std::to_string( i);
+	Hunger = player->hunger;
+	TaskDone = player->taskDone;
+	player -> updateHappyness();
+
+	}
+	
+	if(player->Yulu)
+	{
+	int temp1 = std::stoi(temp)/20;
+	if(temp1 % 100 ==0)
+	{
+	int mon = std:: stoi(player->money);
+	mon -= 10;
+	player->money = std::to_string(mon);
+	Money = player->money;
+	player-> updateHappyness();
+	}
 	}
 }
 
@@ -1618,7 +1772,7 @@ void Game::render()
 
 	map->DrawplayerOneScore(); // scoreboard over map
 	map->DrawHappinessBarU();
-	map->DrawHappinessBarO();
+	map->DrawHappinessBarO(player->getHappyness());
 
 	SDL_Rect fillRect = {0, 500, 800, 100}; // task bar over map
 	SDL_SetRenderDrawColor(gRenderer, 192, 192, 192, 0xFF);
