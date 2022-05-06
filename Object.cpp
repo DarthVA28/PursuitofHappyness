@@ -536,11 +536,37 @@ void Object::addItems( string str)
 			}
 	}
 }
+void Object::addTasks( string str)
 
-    string Object::getIElem(string s[],int i)
-    {
-    return s[i];
-    }
+{
+	for(int i =0; i < 5; i++)
+	{
+			if(tasks[i] == "")
+			{
+			tasks[i] = str;
+			break;
+			}
+	}
+}
+
+void Object::addPowerUps( string str)
+
+{
+	for(int i =0; i < 5; i++)
+	{
+			if(powerUps[i] == "")
+			{
+			powerUps[i] = str;
+			break;
+			}
+	}
+}
+
+
+string Object::getIElem(string s[],int i)
+{
+return s[i];
+}
 void Object::removeItems( string str)
 
 {
