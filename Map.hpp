@@ -28,7 +28,7 @@ public:
     void DrawplayerOneScore();
     void Drawitems(string item, int i);
     void DrawMenu(string menu);
-
+    void DrawPowerUps( string powerUp, int i) ;
    
     void setColliders();
     void Collisions(int camx, int camy, Object* player);
@@ -39,6 +39,7 @@ private:
     SDL_Rect src,dest;
     SDL_Rect Happysrc,Happydest;
     SDL_Rect itemsrc,itemdest;
+    SDL_Rect powerUpsrc,powerUpdest;
     SDL_Rect menusrc,menudest;
     SDL_Texture* dirt;
     SDL_Texture* grass;
@@ -53,6 +54,9 @@ private:
     SDL_Texture* item5;
     SDL_Texture* menu1;
     SDL_Texture* menu2;
+    SDL_Texture* hammer;
+    SDL_Texture* teleport;
+    SDL_Texture* phone;
 
     int map[MAP_X*MAP_Y];
 };
