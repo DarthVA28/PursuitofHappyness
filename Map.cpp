@@ -39,27 +39,27 @@ Map::Map() {
     printf("ERROR cant load background of happiness bar");
     }
       item1 = TM::LoadTexture("assets/item1.png");
-    if(playerOneScore == NULL)
+    if(item1 == NULL)
     {
     printf("ERROR cant load item1");
     }
       item2 = TM::LoadTexture("assets/item2.png");
-    if(playerOneScore == NULL)
+    if(item2 == NULL)
     {
     printf("ERROR cant load item2");
     }
       item3 = TM::LoadTexture("assets/item3.png");
-    if(playerOneScore == NULL)
+    if(item3 == NULL)
     {
     printf("ERROR cant load item");
     }
       item4 = TM::LoadTexture("assets/item4.png");
-    if(playerOneScore == NULL)
+    if(item4 == NULL)
     {
     printf("ERROR cant load item4");
     }
       item5 = TM::LoadTexture("assets/item5.png");
-    if(playerOneScore == NULL)
+    if(item5 == NULL)
     {
     printf("ERROR cant load item5");
     }
@@ -83,10 +83,75 @@ Map::Map() {
     {
     printf("ERROR cant load phone");
     }
-              teleport = TM::LoadTexture("assets/item4.png");
+              teleport = TM::LoadTexture("assets/teleporter.png");
     if(teleport == NULL)
     {
     printf("ERROR cant load teleport");
+    }
+                  camera = TM::LoadTexture("assets/camera.png");
+    if((camera == NULL))
+    {
+    printf("ERROR cant load camera");
+    }
+                  shoes = TM::LoadTexture("assets/shoes.png");
+     if(shoes == NULL)
+    {
+    printf("ERROR cant load shoes");
+    }
+                  pendant = TM::LoadTexture("assets/pendant.png");
+     if(pendant== NULL)
+    {
+    printf("ERROR cant load pendant");
+    }
+                  key = TM::LoadTexture("assets/key.png");
+     if(key == NULL)
+    {
+    printf("ERROR cant load key");
+    }
+                  refreshments = TM::LoadTexture("assets/snacks.png");
+     if(refreshments == NULL)
+    {
+    printf("ERROR cant load snack");
+    }
+                  refreshmentsmain = TM::LoadTexture("assets/snack2.png");
+         if(refreshmentsmain == NULL)
+    {
+    printf("ERROR cant load snack");
+    }
+                  clothes = TM::LoadTexture("assets/dress.png");
+         if(clothes == NULL)
+    {
+    printf("ERROR cant load clothes");
+    }
+                  cash = TM::LoadTexture("assets/cash.png");
+         if(cash == NULL)
+    {
+    printf("ERROR cant load cash");
+    }
+                  facche = TM::LoadTexture("assets/freshers.png");
+         if(facche == NULL)
+    {
+    printf("ERROR cant load freshers");
+    }
+                  water = TM::LoadTexture("assets/waterbottle.png");
+         if(water == NULL)
+    {
+    printf("ERROR cant load water");
+    }
+                  laptop = TM::LoadTexture("assets/laptop.png");
+         if(laptop == NULL)
+    {
+    printf("ERROR cant load laptop");
+    }
+                  passes = TM::LoadTexture("assets/pass.png");
+         if(passes == NULL)
+    {
+    printf("ERROR cant load pass");
+    }
+                  cones = TM::LoadTexture("assets/cone.png");
+         if(cones == NULL)
+    {
+    printf("ERROR cant load cones");
     }
     
     LoadMap(map1);
@@ -99,7 +164,6 @@ Map::Map() {
     dest.x = 0;
     dest.y = 0;
 }
-
 Map::~Map() {
 
 }
@@ -181,7 +245,7 @@ void Map::DrawHappinessBarU() {
     Happydest.h = 20;
     TM::Draw(HappinessBarU,Happysrc,Happydest);
 }
-void Map::DrawHappinessBarO() {
+void Map::DrawHappinessBarO(int score) {
     Happysrc.x = 0;
     Happysrc.y = 0;
     Happysrc.w = 796;
@@ -203,31 +267,64 @@ void Map::Drawitems( string item, int i) {
     itemsrc.h = 233;
     itemdest.x = 250 + 70*i;   
     itemdest.y =230;
-    itemdest.w = 50;
-    itemdest.h = 50;
-    if((item == "item1"))
+    itemdest.w = 64;
+    itemdest.h = 64;
+    if((item == "camera"))
     {
-    TM::Draw(item1,itemsrc,itemdest);
+    TM::Draw(camera,itemsrc,itemdest);
     }
-     if(item == "item2")
+     if(item == "shoes")
     {
-    TM::Draw(item2,itemsrc,itemdest);
+    TM::Draw(shoes,itemsrc,itemdest);
     }
-     if(item == "item3")
+     if(item == "pendant")
     {
-    TM::Draw(item3,itemsrc,itemdest);
+    TM::Draw(pendant,itemsrc,itemdest);
     }
-     if(item == "item4")
+     if(item == "key")
     {
-    TM::Draw(item4,itemsrc,itemdest);
+    TM::Draw(key,itemsrc,itemdest);
     }
-     if(item == "item5")
+     if(item == "refreshments")
     {
-    TM::Draw(item5,itemsrc,itemdest);
+    TM::Draw(refreshments,itemsrc,itemdest);
+    }
+         if(item == "refreshmentsmain")
+    {
+    TM::Draw(refreshmentsmain,itemsrc,itemdest);
+    }
+         if(item == "clothes")
+    {
+    TM::Draw(clothes,itemsrc,itemdest);
+    }
+         if(item == "cash")
+    {
+    TM::Draw(cash,itemsrc,itemdest);
+    }
+         if(item == "facche")
+    {
+    TM::Draw(facche,itemsrc,itemdest);
+    }
+         if(item == "water")
+    {
+    TM::Draw(water,itemsrc,itemdest);
+    }
+         if(item == "laptop")
+    {
+    TM::Draw(laptop,itemsrc,itemdest);
+    }
+         if(item == "passes")
+    {
+    TM::Draw(passes,itemsrc,itemdest);
+    }
+         if(item == "cones")
+    {
+    TM::Draw(cones,itemsrc,itemdest);
     }
     
     
 }
+
 
 void Map::DrawPowerUps( string powerUp, int i) {
     powerUpsrc.x = 0;
@@ -246,7 +343,7 @@ if((powerUp == "phone"))
     {
     TM::Draw(hammer,powerUpsrc,powerUpdest);
     }
-     if(powerUp == "teleport")
+     if(powerUp == "teleporter")
     {
     TM::Draw(teleport,powerUpsrc,powerUpdest);
     }
