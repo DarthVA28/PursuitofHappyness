@@ -17,7 +17,7 @@ Map::Map() {
     dirt = TM::LoadTexture("assets/dirt.png");
     grass = TM::LoadTexture("assets/grass.png");
     
-    campus = TM::LoadTexture("assets/campusv2.png");
+    campus = TM::LoadTexture("assets/campusv3.png");
     if(campus == NULL)
     {
     printf("ERROR cant load image of campus");
