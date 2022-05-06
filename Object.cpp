@@ -13,6 +13,7 @@ Object::Object(const char* texturesheet, int x, int y) {
     ypos = y;
     frame = 0;
     velocity = 10;
+    happyness= 180;
     Yulu = false;
     gotChance = false;
     activePowerUp = -1;
@@ -602,17 +603,20 @@ string Object::getIElem(string s[],int i)
 {
 return s[i];
 }
-void Object::removeItems( string str)
+bool Object::removeItems( string str)
 
 {
+bool success = false;
 	for(int i =0; i < 5; i++)
 	{
 			if(inventoryItems[i] == str)
 			{
 			inventoryItems[i] = "";
+			success = true;
 			break;
 			}
 	}
+	return success;
 }
 
 
@@ -756,4 +760,20 @@ void Object::randomTeleport(int location){
         default:
             break;
     }
+}
+
+int Object::getHappyness()
+{
+return happyness;
+}
+void Object::updateHappyness()
+{
+int h = std::stoi(hunger);
+int m = std::stoi(money);
+int td = std::stoi(taskDone);
+happyness = 180 -((3*h+1 +((1000-m)/20))/(td+1));
+if(happyness >180){
+happyness = 180;
+}
+
 }
