@@ -36,5 +36,6 @@ private:
     bool isRunning;
     SDL_Window *gWindow;
 
+    
 };
 #endif
