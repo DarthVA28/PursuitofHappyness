@@ -18,8 +18,11 @@ public:
     void objMove(int dir);
     void objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], int num_NPC, Chance* activeChance[]);
     void addItems(string str);
+    void addPowerUps(string str);
     void removeItems(string str);
-    void addTask(string str);
+    void removeTasks(string str);
+    void removePowerUps(string str);
+    void addTasks(string str);
     void changeFrame(int dir);
     void toggleYulu();
 
@@ -30,6 +33,7 @@ public:
     bool checkTileCollision(int x, int y);
 
     string inventoryItems[5];
+    string powerUps[2];
     string tasks[5];
 
     int frame;
