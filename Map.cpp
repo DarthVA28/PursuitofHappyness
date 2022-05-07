@@ -478,7 +478,7 @@ const char* Map::getRegion(int x, int y) {
     const char* nil = "NILGIRI";
     const char* ara = "ARAVALI";
     const char* kara = "KARAKORAM";
-    const char* araNM = "ARAVALI NIGHT MESS";
+    const char* araNM = "HOLISTIC";
     const char* Himadri = "HIMADRI";
     const char* kailash = "KAILASH";
     const char* girnar = "GIRNAR";
@@ -507,7 +507,7 @@ const char* Map::getRegion(int x, int y) {
     const char* shiru = "SHIRU CAFE";
     const char* amul1 = "AMUL";
     const char* sit = "SCHOOL OF IT";
-    const char* chayoos = "CHAYOOS";
+    const char* chayoos = "CHAAYOS";
     const char* rajdhani = "RAJDHANI";
     const char* MM = "MASALA MIX";
     const char* sbi= "SBI";

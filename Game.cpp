@@ -1203,16 +1203,110 @@ void Game::handleEvent()
 	
 				case SDLK_m:
 
-					if(display == "MASALA MIX"|| display == "RAJDHANI")
+					if(display == "MASALA MIX")
 					{
-					openMenu1 = true;
-					loc1eat= false;
+						int i = std::stoi(player->hunger);
+						i-=20;
+						if(i<0){
+							i=0;
+						}
+						player->hunger = std::to_string(i);
+						int j = std::stoi(player->money);
+						j-=200;
+						if(j<0){
+							j=0;
+						}
+						player->money = std::to_string(j);
 					}
-					if(display == "AMUL" || display == "NILGIRI")
-					
+					if(display == "AMUL")
 					{
-					openMenu2 = true;
-					loc2eat= false;
+					int i = std::stoi(player->hunger);
+					i-=5;
+					if(i<0){
+							i=0;
+						}
+					player->hunger = std::to_string(i);
+					int j = std::stoi(player->money);
+					j-=100;
+					if(j<0){
+						j=0;
+					}
+					player->money = std::to_string(j);
+					}
+					if(display == "SHIRU")
+					{
+					int i = std::stoi(player->hunger);
+					i-=2;
+					if(i<0){
+							i=0;
+						}
+					player->hunger = std::to_string(i);
+					int j = std::stoi(player->money);
+					j-=50;
+					if(j<0){
+						j=0;
+					}
+					player->money = std::to_string(j);
+					}
+					if(display == "RAJDHANI")
+					{
+					int i = std::stoi(player->hunger);
+					i-=35;
+					if(i<0){
+							i=0;
+						}
+					player->hunger = std::to_string(i);
+					int j = std::stoi(player->money);
+					j-=400;
+					if(j<0){
+						j=0;
+					}
+					player->money = std::to_string(j);
+					}
+					if(display == "CHAAYOS")
+					{
+					int i = std::stoi(player->hunger);
+					i-=30;
+					if(i<0){
+							i=0;
+						}
+					player->hunger = std::to_string(i);
+					int j = std::stoi(player->money);
+					j-=500;
+					if(j<0){
+						j=0;
+					}
+					player->money = std::to_string(j);
+					}
+					if(display == "NESCAFE")
+					{
+					int i = std::stoi(player->hunger);
+					i-=5;
+					if(i<0){
+							i=0;
+						}
+					player->hunger = std::to_string(i);
+					int j = std::stoi(player->money);
+					j-=80;
+					if(j<0){
+						j=0;
+					}
+					player->money = std::to_string(j);
+					}
+					if(display == "HOLISTIC")
+					{
+					int i = std::stoi(player->hunger);
+					i-=15;
+					if(i<0){
+							i=0;
+						}
+					player->hunger = std::to_string(i);
+					int j = std::stoi(player->money);
+					j-=200;
+					if(j<0){
+						j=0;
+					}
+					player->money = std::to_string(j);
 					}
 
 					break;
@@ -1525,12 +1619,18 @@ void Game::handleEvent()
 				
 				if(display == "STAFF CANTEEN")
 				{
-				std::cout << "OK!!!!" << std::endl;
+				// std::cout << "OK!!!!" << std::endl;
 				(taskarray[14]->taskDone) = true;
 				(taskarray[15]->taskDone) = true;
 				int i = std::stoi(player->taskDone);
 				i++;
 				player->taskDone = std::to_string(i);
+				int j = std::stoi(player->hunger);
+				j-=20;
+				if(j<0){
+						j=0;
+					}
+				player->hunger = std::to_string(j);
 				}
 				break;
 				

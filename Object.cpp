@@ -23,6 +23,7 @@ Object::Object(const char* texturesheet, int x, int y) {
     usedHammer = 0;
     usedPhone = 0;
     chanceRender = "";
+    money = "1000";
     taskIndex = 0;
     renderer = Game::gRenderer;
     objTexture = TM::LoadTexture(texturesheet);
@@ -463,6 +464,14 @@ void Object::objUpdate() {
     destRect.y = ypos;
     destRect.w = 2*srcRect.w;
     destRect.h = 2*srcRect.h;
+
+    int m = std::stoi(money);
+    if(m<0 && Yulu){
+        m = 0;
+        money = to_string(m);
+        Yulu = false;
+        toggleYulu();
+    }
 }
 
 void Object::objRender() {
@@ -926,7 +935,7 @@ void Object::collisionChance(){
         case 10:
             chanceRender = "Mystery Box: Feeling Hungry";        
             i = std::stoi(hunger);
-	        i+=10;
+	        i+=40;
 	        hunger = std::to_string(i);
             break;
         default:
