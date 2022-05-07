@@ -919,8 +919,8 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 		isRunning = false;
 	}
 
-	player = new Object("assets/player.png", 12376, 2048);
-	player2 = new Object("assets/player2.png", 9032,4272);
+	player = new Object("assets/player.png", 5406, 7540);
+	player2 = new Object("assets/player2.png", 5406, 7598);
 
 	int min = 0;
 	int max = 15;
@@ -1359,6 +1359,15 @@ void Game::handleEvent()
 					openTaskSchedule = true;
 
 					break;
+
+					case SDLK_v:
+					if (display == "SPORTS GROUNDS"){
+						if (std::stoi(player->taskDone) == 5){
+							player->happyness+=5;
+						}
+					}
+					break;	
+					
 				case SDLK_o:
 
 					openInventory = false;
@@ -1977,7 +1986,9 @@ void Game::render()
 
 	maps->DrawplayerOneScore(); // scoreboard over maps
 	maps->DrawHappinessBarU();
+	maps->DrawHappinessBarU2();
 	maps->DrawHappinessBarO(player->getHappyness());
+	maps->DrawHappinessBarO2(p2happyness);
 
 	SDL_Rect messageRect = {0, 460, 800, 50}; // task bar over maps
 	SDL_SetRenderDrawColor(gRenderer, 135,206,250, 0xFF);
@@ -2007,7 +2018,7 @@ void Game::render()
 		if (openTaskSchedule)
 	{
 
-		SDL_Rect fillRect2 = {250, 200, 300, 300}; // task bar over maps
+		SDL_Rect fillRect2 = {220, 200, 500, 300}; // task bar over maps
 		SDL_SetRenderDrawColor(gRenderer, 192, 192, 192, 0xFF);
 		SDL_RenderFillRect(gRenderer, &fillRect2);
 		SDL_Color textColor2 = {255, 0, 0};
@@ -2026,7 +2037,7 @@ void Game::render()
 					printf( "Unable to render time texture!\n" );
 				}
 			}
-			gTaskTextTexture.render(270, 240 +40*i);
+			gTaskTextTexture.render(240, 240 +40*i);
 		}
 	}
 
@@ -2117,7 +2128,7 @@ void Game::render()
 	SDL_RenderPresent(gRenderer);
 }
 	if(endScreen)
-	{   if(player->getHappyness() >=100 && notSet)
+	{   if(player->getHappyness() >= std::stoi(p2happyness) && notSet)
 	{
 		endMessage = "player 1 wins";
 	}

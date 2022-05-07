@@ -53,6 +53,7 @@ public:
     int frame;
     int numInventoryItems;
     int getx();
+    int happyness;
     int gety();
     int getHappyness();
     string hunger ;
@@ -73,7 +74,8 @@ private:
     int xpos;
     int ypos;
     int velocity;
-    int happyness; //from pursuit of Happyness
+    // int happyness;
+     //from pursuit of Happyness
 
     SDL_Texture* objTexture;
     SDL_Rect textureSheet[24];

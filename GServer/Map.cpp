@@ -289,7 +289,7 @@ void Map::DrawHappinessBarO2(string score) {
     Happydest1.x = 30;
     
     Happydest1.y =50;
-    Happydest1.w = 50;
+    Happydest1.w = std::stoi(score);
     Happydest1.h = 20;
     TM::Draw(HappinessBarO2,Happysrc1,Happydest1);
     
