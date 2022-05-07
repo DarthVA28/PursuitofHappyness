@@ -6,12 +6,16 @@
 #include "PowerUp.hpp"
 #include "Tuple.hpp"
 #include "Chance.hpp"
-#include "Task.hpp"
 // #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 #include <string>
 #include <sstream>
-#include <iostream>
+#include <arpa/inet.h>
+#include <stdio.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#define PORT 8869
+
 using std::string;
 
 // Mix_Music *gMusic = nullptr;
@@ -34,6 +38,7 @@ string display = "TRAVELLING...";
 string Hunger;
 string Money;
 string TaskDone;
+char* s18 = "123456789012345678";
 
 string messageForPopUp= " ";
 bool toGivePopUp=false;
@@ -50,30 +55,26 @@ bool openInventory = false;
 bool openTaskSchedule = false;
 bool openMenu1 = false;
 bool openMenu2 = false;
-bool openTeleportMenu = false;
 bool loc1eat = false;
 bool loc2eat = false;
 bool openTaskSheet = false;
 bool Game ::firstCheck = true;
-
-Task* taskarray[16];
-
-// Booleans forTasks
-// bool fixKey = false;
-// bool bringLaptop= false;
-// bool bringCSCrefreshments = false;
-// bool clothesCSC = false;
-// bool sponsorCash = false;
-// bool faccheForSponsor = false;
-// bool cameraForBRCA = false;
-// bool refreshmentsForBRCA = false;
-// bool cameraForRedSq = false;
-// bool waterForRedSq = false;
-// bool shoesForNalanda = false;
-// bool conesForNalanda = false;
-// bool pendantForPronite = false;
-// bool passesForPronite = false;
-// bool lunch = false;
+bool fixKey = false;
+bool bringLaptop= false;
+bool bringCSCrefreshments = false;
+bool clothesCSC = false;
+bool sponsorCash = false;
+bool faccheForSponsor = false;
+bool cameraForBRCA = false;
+bool refreshmentsForBRCA = false;
+bool cameraForRedSq = false;
+bool waterForRedSq = false;
+bool shoesForNalanda = false;
+bool conesForNalanda = false;
+bool pendantForPronite = false;
+bool passesForPronite = false;
+bool lunch = false;
+bool openTeleportMenu = false;
 
 
 SDL_Renderer *Game::gRenderer = nullptr;
@@ -773,6 +774,9 @@ Object *player2;
 NPC* activeNPC[10];
 NPC *professor;
 Map *map;
+int sock = 0, valread;
+char buffer[64] = { 0 };
+char* parameters;
 
 int NUM_ACTIVE_NPC = 0;
 const int NUM_ACTIVE_CHANCE = 2;
@@ -791,6 +795,31 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 {
 	// Initialization flag
 	bool success = true;
+	struct sockaddr_in serv_addr;
+	parameters = "Hello from client2";
+	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+		printf("\n Socket creation error \n");
+		success = false;
+	}
+
+	serv_addr.sin_family = AF_INET;
+	serv_addr.sin_port = htons(PORT);
+
+	// Convert IPv4 and IPv6 addresses from text to binary
+	// form
+	if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)
+		<= 0) {
+		success = false;
+		printf(
+			"\nInvalid address/ Address not supported \n");
+	}
+
+	if (connect(sock, (struct sockaddr*)&serv_addr,
+				sizeof(serv_addr))
+		< 0) {
+		success = false;
+		printf("\nConnection Failed \n");
+	}
 	int flags = 0;
 	cnt = w - 128;
 	tinit = SDL_GetTicks();
@@ -890,8 +919,26 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 		isRunning = false;
 	}
 
-	player = new Object("assets/player.png", 12376, 2048);
-	player2 = new Object("assets/player2.png", 9032,4272);
+    player = new Object("assets/player2.png", 9032,4272);
+	player2 = new Object("assets/player.png", 12376, 2048);
+
+	string taskarray[16];
+	taskarray[0] = "SAC MEETING: Bring laptop from hostel.";
+	taskarray[1] = "SAC MEETING: Fix rec room key at Rajdhani.";
+	taskarray[2] = "CSC FASHION SHOW: Bring snacks from Metro Gate.";
+	taskarray[3] = "CSC FASHION SHOW: Get clothes from Himadri Circle";
+	taskarray[4] = "LHC SPONSOR EVENT: Get cash from SBI";
+	taskarray[5] = "LHC SPONSOR EVENT: Call freshers from Library";
+	taskarray[6] = "RED SQUARE: Bring camera from SAC";
+	taskarray[7] = "RED SQUARE: Fetch water from Amul";
+	taskarray[8] = "MECH LAWN BRCA: Get snacks from Main Gate";
+	taskarray[9] = "MECH LAWN BRCA: Bring camera from SAC";
+	taskarray[10] = "NALANDA BIKING: Get cones from sports ground";
+	taskarray[11] = "NALANDA BIKING: Borrow shoes from Satpura";
+	taskarray[12] = "PRONITE: Get passes from LHC";
+	taskarray[13] = "PRONITE: Fix pendant at Dep. of Design";
+	taskarray[14] = "EAT LUNCH";
+	taskarray[15] = "EAT LUNCH";
 
 	int min = 0;
 	int max = 15;
@@ -899,23 +946,6 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 
 	int assigned1[5];
 	int assigned2[5];
-
-	taskarray[0] = new Task("SAC MEETING: Bring laptop from hostel.");
-	taskarray[1] = new Task("SAC MEETING: Fix rec room key at Rajdhani.");
-	taskarray[2] = new Task("CSC FASHION SHOW: Bring snacks from Metro Gate.");
-	taskarray[3] = new Task("CSC FASHION SHOW: Get clothes from Himadri Circle");
-	taskarray[4] = new Task("LHC SPONSOR EVENT: Get cash from SBI");
-	taskarray[5] = new Task("LHC SPONSOR EVENT: Call freshers from Library");
-	taskarray[6] = new Task("RED SQUARE: Bring camera from SAC");
-	taskarray[7] = new Task("RED SQUARE: Fetch water from Amul");
-	taskarray[8] = new Task("MECH LAWN BRCA: Get snacks from Main Gate");
-	taskarray[9] = new Task("MECH LAWN BRCA: Bring camera from SAC");
-	taskarray[10] = new Task("NALANDA BIKING: Get cones from sports ground");
-	taskarray[11] = new Task("NALANDA BIKING: Borrow shoes from Satpura");
-	taskarray[12] = new Task("PRONITE: Get passes from LHC");
-	taskarray[13] = new Task("PRONITE: Fix pendant at Dep. of Design");
-	taskarray[14] = new Task("EAT LUNCH");
-	taskarray[15] = new Task("EAT LUNCH");
 
 	for(int i=0; i<4; i++) {
 		int idx = 0;
@@ -1016,7 +1046,7 @@ void Game::init(const char *win_title, int xpos, int ypos, int h, int w, bool fs
 	cArray[19] = new Tuple(8372, 3132);
 	t5 = SDL_GetTicks();
 
-	activePUPS[0] = new PowerUp(1,12312, 2016);
+	activePUPS[0] = new PowerUp(2,12312, 2016);
 	activePUPS[1] = new PowerUp(0, 5332, 3632);
 	activePUPS[2] = new PowerUp(1, 8372, 3132);
 	activePUPS[3] = new PowerUp(1, 3072, 6932);
@@ -1143,6 +1173,19 @@ void Game::handleEvent()
 		SDL_RenderPresent(gRenderer);
 	}
 
+    valread = read(sock, buffer, 1024); //SEE THIS
+    // string p2score = std::to_string(buffer[0]) + std::to_string(buffer[1]) + std::to_string(buffer[2]);
+    // string p2x = std::to_string(buffer[3])+std::to_string(buffer[4])+std::to_string(buffer[5])+std::to_string(buffer[6])+std::to_string(buffer[7]);
+    // string p2y = std::to_string(buffer[8])+std::to_string(buffer[9])+std::to_string(buffer[10])+std::to_string(buffer[11])+std::to_string(buffer[12]);
+    // string hasHam = std::to_string(buffer[13]);
+    // string usedTel = std::to_string(buffer[14]); 
+    // string usedHam = std::to_string(buffer[15]);
+    // string curFrame = std::to_string(buffer[16]) + std::to_string(buffer[17]);
+
+    // player2->setx(std::stoi(p2x));
+    // player2->sety(std::stoi(p2y));
+    // player2->setFrame(std::stoi(curFrame));
+
 	SDL_Color textColor1 = {255, 0, 0};
 	timeText.str( "" );
 	timeText <<  SDL_GetTicks() -startTime ; 
@@ -1203,12 +1246,12 @@ void Game::handleEvent()
 	
 				case SDLK_m:
 
-					if(display == "MASALA MIX"|| display == "RAJDHANI")
+					if(loc1eat)
 					{
 					openMenu1 = true;
 					loc1eat= false;
 					}
-					if(display == "AMUL" || display == "NILGIRI")
+					if(loc2eat)
 					
 					{
 					openMenu2 = true;
@@ -1217,7 +1260,7 @@ void Game::handleEvent()
 
 					break;
 				case SDLK_t:
-					// printf("6");
+					printf("6");
 					openTaskSchedule = true;
 
 					break;
@@ -1244,10 +1287,6 @@ void Game::handleEvent()
 					player->toggleYulu();
 					
 				}
-				break;
-
-				case SDLK_p:
-					player->removePowerUps();
 				break;
 			
 				
@@ -1378,50 +1417,53 @@ void Game::handleEvent()
 				break;
 
 				}
-
-				break;
 				
 				
 				
 				
 				case SDLK_d:
+			
+		
+				
+				
 				if(display == "SAC")      //sac done
 				{
-					if(player-> removeItems("laptop"))
-					{
-					(taskarray[0]->taskDone) = true;
-					int i = std::stoi(player->taskDone );
-					i++;
-					player->taskDone = std::to_string(i);
-					}
-
-					if(player-> removeItems("key")){
-					(taskarray[1]->taskDone) = true;
-					int i = std::stoi(player->taskDone );
-					i++;
-					player->taskDone = std::to_string(i);
-					
-					}
+				if(player-> removeItems("laptop"))
+				{
+				bringLaptop = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				}
+				if(player-> removeItems("key")){
+				fixKey = true;
+				int i = std::stoi(player->taskDone );
+				i++;
+				player->taskDone = std::to_string(i);
+				
+				}
+				break;
 				}
 				
 				
-				if(display == "LHC")  
+				if(display == "NEW LHC")  
 				{
 				
 				if(player-> removeItems("facche"))
 				{
-				(taskarray[5]->taskDone) = true;
+				faccheForSponsor = true;
 				int i = std::stoi(player->taskDone );
 				i++;
 				player->taskDone = std::to_string(i);
 				}
 				if(player-> removeItems("cash"))
 				{
-				(taskarray[4]->taskDone) = true;
+				sponsorCash = true;
 				int i = std::stoi(player->taskDone );
 				i++;
 				player->taskDone = std::to_string(i);
 				}
+				break;
 				}
 				
 				
@@ -1430,32 +1472,31 @@ void Game::handleEvent()
 					if(player-> removeItems("camera"))
 					
 				{
-				(taskarray[9]->taskDone) = true;
+				cameraForBRCA = true;
 				int i = std::stoi(player->taskDone );
 				i++;
 				player->taskDone = std::to_string(i);
 				}
 					if(player-> removeItems("refreshmentsmain"))
 				{
-				(taskarray[8]->taskDone) = true;
+				refreshmentsForBRCA = true;
 				int i = std::stoi(player->taskDone );
 				i++;
 				player->taskDone = std::to_string(i);
-				}
 				}
 				
 				if(display == "RED SQUARE")
 				{
 					if(player-> removeItems("camera"))
 				{
-				(taskarray[6]->taskDone) = true;
+				cameraForRedSq = true;
 				int i = std::stoi(player->taskDone );
 				i++;
 				player->taskDone = std::to_string(i);
 				}
 					if(player-> removeItems("water"))
 				{
-				(taskarray[7]->taskDone) = true;
+				waterForRedSq = true;
 				int i = std::stoi(player->taskDone );
 				i++;
 				player->taskDone = std::to_string(i);
@@ -1463,18 +1504,18 @@ void Game::handleEvent()
 				break;
 				}
 		
-				if(display == "NALANDA")
+				if(display == "NALNADA")
 				{
 					if(player-> removeItems("cones"))
 				{
-				(taskarray[10]->taskDone) = true;
+				conesForNalanda = true;
 				int i = std::stoi(player->taskDone );
 				i++;
 				player->taskDone = std::to_string(i);
 				}
 					if(player-> removeItems("shoes"))
 				{
-				(taskarray[11]->taskDone) = true;
+				shoesForNalanda = true;
 				int i = std::stoi(player->taskDone );
 				i++;
 				player->taskDone = std::to_string(i);
@@ -1487,14 +1528,14 @@ void Game::handleEvent()
 				{
 				if(player-> removeItems("passes"))
 				{
-				(taskarray[12]->taskDone) = true;
+				passesForPronite = true;
 				int i = std::stoi(player->taskDone );
 				i++;
 				player->taskDone = std::to_string(i);
 				}
 				if(player-> removeItems("pendant"))
 				{
-				(taskarray[13]->taskDone) = true;
+				pendantForPronite = true;
 				int i = std::stoi(player->taskDone );
 				i++;
 				player->taskDone = std::to_string(i);
@@ -1508,14 +1549,14 @@ void Game::handleEvent()
 				{
 				if(player-> removeItems("refreshments"))
 				{
-				(taskarray[2]->taskDone) = true;
+				bringCSCrefreshments = true;
 				int i = std::stoi(player->taskDone );
 				i++;
 				player->taskDone = std::to_string(i);
 				}
 				if(player-> removeItems("clothes"))
 				{
-				(taskarray[3]->taskDone) = true;
+				clothesCSC = true;
 				int i = std::stoi(player->taskDone );
 				i++;
 				player->taskDone = std::to_string(i);
@@ -1525,10 +1566,8 @@ void Game::handleEvent()
 				
 				if(display == "STAFF CANTEEN")
 				{
-				std::cout << "OK!!!!" << std::endl;
-				(taskarray[14]->taskDone) = true;
-				(taskarray[15]->taskDone) = true;
-				int i = std::stoi(player->taskDone);
+				lunch = true;
+				int i = std::stoi(player->taskDone );
 				i++;
 				player->taskDone = std::to_string(i);
 				}
@@ -1620,9 +1659,16 @@ void Game::handleEvent()
 	musicOnButton.handleEvent(&e);
 	musicOffButton.handleEvent(&e);
 }
+}
 
 void Game::update()
 {
+    // parameters = (char*) (std::to_string(player->getHappyness()) + std::to_string(player->getx()) + std::to_string(player->gety()) + std::to_string(player->hasHammer) + std::to_string(player->usedTeleport) + std::to_string(player->usedHammer) + std::to_string(player->frame)).c_str();
+    player->hasHammer = 0;
+    player->usedTeleport = 0;
+    player->usedHammer = 0;
+	parameters = s18;
+    send(sock, parameters, strlen(parameters), 0);
 	player->objUpdate();
 	player2->objUpdate();
 	display = (string) (map->getRegion(player->getx(),player->gety()));
@@ -1713,7 +1759,6 @@ void Game::update()
 	// if( gCamera.y > 32*(map->MAP_Y) - gCamera.h ) {
 	//     gCamera.y = (map->MAP_Y) - gCamera.h;
 	// }
-
 	string temp = timeText.str();
 	int temp1 = std::stoi(temp)/10;
 	//string temp2 = std::to_string(temp1);
@@ -1721,7 +1766,8 @@ void Game::update()
 	{
 	int i = std::stoi(player->hunger);
 	i+=1;
-	player->hunger = std::to_string(i);
+	player->hunger = std::to_string( i);
+	Hunger = player->hunger;
 	TaskDone = player->taskDone;
 	player -> updateHappyness();
 
@@ -1732,15 +1778,13 @@ void Game::update()
 	int temp1 = std::stoi(temp)/20;
 	if(temp1 % 100 ==0)
 	{
-		int mon = std:: stoi(player->money);
-		mon -= 10;
-		player->money = std::to_string(mon);
-		player-> updateHappyness();
-	}
-	}
-
-	Hunger = player->hunger;
+	int mon = std:: stoi(player->money);
+	mon -= 10;
+	player->money = std::to_string(mon);
 	Money = player->money;
+	player-> updateHappyness();
+	}
+	}
 }
 
 void Game::render()
@@ -1772,25 +1816,9 @@ void Game::render()
 	} 
 
 	if(player->gotChance == true) {
-		messageForPopUp = player->chanceRender;
-		toGivePopUp = true;
-		dispTime= SDL_GetTicks();
+		// Logic for any rendering and stuff ADD HERE
 		player->gotChance = false;
 	} 
-
-	if(player->profColl == true) {
-		messageForPopUp = "Prof took away 10 happiness!";
-		toGivePopUp = true;
-		dispTime= SDL_GetTicks();
-		player->profColl = false;
-	} 
-
-	if(player->usedPhone == 1) {
-		messageForPopUp = player->powerupRender;
-		toGivePopUp = true;
-		dispTime= SDL_GetTicks();
-		player->usedPhone = 0;
-	}
 
 	map->DrawplayerOneScore(); // scoreboard over map
 	map->DrawHappinessBarU();
@@ -1824,20 +1852,13 @@ void Game::render()
 		SDL_SetRenderDrawColor(gRenderer, 192, 192, 192, 0xFF);
 		SDL_RenderFillRect(gRenderer, &fillRect2);
 		SDL_Color textColor2 = {255, 0, 0};
-		SDL_Color textColor3 = {0,255,0};
 		for (int i = 0; i < 5; i++)
 		{
 
-			string s = ((player->tasks[i])->taskDesc);
-			if ((player->tasks[i])->taskDone) {
-				if( !(gTaskTextTexture.loadFromRenderedText( s, textColor3 ))  ){
-					printf( "Unable to render time texture!\n" );
-				}	
-			} else {
+			string s = player->getIElem(player->tasks, i);
 				if( !(gTaskTextTexture.loadFromRenderedText( s, textColor2 ))  )
-				{
-					printf( "Unable to render time texture!\n" );
-				}
+			{
+				printf( "Unable to render time texture!\n" );
 			}
 			gTaskTextTexture.render(270, 240 +40*i);
 		}

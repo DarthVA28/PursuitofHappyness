@@ -16,7 +16,14 @@ Object::Object(const char* texturesheet, int x, int y) {
     happyness= 180;
     Yulu = false;
     gotChance = false;
+    profColl = false;
     activePowerUp = -1;
+    hasHammer = 0;
+    usedTeleport = 0;
+    usedHammer = 0;
+    usedPhone = 0;
+    chanceRender = "";
+    taskIndex = 0;
     renderer = Game::gRenderer;
     objTexture = TM::LoadTexture(texturesheet);
 
@@ -224,7 +231,6 @@ Object::Object(const char* texturesheet, int x, int y) {
 void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], int num_NPC, Chance* activeChance[], PowerUp* activePUPS[]) {
     inMotion = true;
     bool isTileCollision = false;
-    bool isNPCCollision = false;
     Tuple* tup = new Tuple(0,0);
     switch (dir) {
         case 1:
@@ -241,8 +247,9 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
             for(int j=0;j<num_NPC;j++){
                 SDL_Rect c = (activeNPC[j]->getCollider());
                 if (checkCollision(c)) {
-                    isNPCCollision = true;
+                    profColl = true;
                     activeNPC[j]->onCollision();
+                    collisionNPC();
                 }
             }
 
@@ -251,6 +258,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
                 if (checkCollision(d)) {
                     gotChance = true;
                     activeChance[k]->onCollision();
+                    collisionChance();
                 }
             }
 
@@ -281,8 +289,9 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
             for(int j=0;j<num_NPC;j++){
                 SDL_Rect c = (activeNPC[j]->getCollider());
                 if (checkCollision(c)) {
-                    isNPCCollision = true;
+                    profColl = true;
                     activeNPC[j]->onCollision();
+                    collisionNPC();
                 }
             }
 
@@ -291,6 +300,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
                 if (checkCollision(d)) {
                     gotChance = true;
                     activeChance[k]->onCollision();
+                    collisionChance();
                 }
             }
 
@@ -320,8 +330,9 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
             for(int j=0;j<num_NPC;j++){
                 SDL_Rect c = (activeNPC[j]->getCollider());
                 if (checkCollision(c)) {
-                    isNPCCollision = true;
+                    profColl = true;
                     activeNPC[j]->onCollision();
+                    collisionNPC();
                 }
             }
 
@@ -330,6 +341,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
                 if (checkCollision(d)) {
                     gotChance = true;
                     activeChance[k]->onCollision();
+                    collisionChance();
                 }
             }
 
@@ -359,8 +371,9 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
             for(int j=0;j<num_NPC;j++){
                 SDL_Rect c = (activeNPC[j]->getCollider());
                 if (checkCollision(c)) {
-                    isNPCCollision = true;
+                    profColl = true;
                     activeNPC[j]->onCollision();
+                    collisionNPC();
                 }
             }
 
@@ -369,6 +382,7 @@ void Object::objMove(int dir, SDL_Rect b, Tuple* Colliders[], NPC* activeNPC[], 
                 if (checkCollision(d)) {
                     gotChance = true;
                     activeChance[k]->onCollision();
+                    collisionChance();
                 }
             }
 
@@ -572,32 +586,72 @@ void Object::addItems( string str)
 			}
 	}
 }
-void Object::addTasks( string str)
+void Object::addTasks(Task* t)
 
 {
-	for(int i =0; i < 5; i++)
-	{
-			if(tasks[i] == "")
-			{
-			tasks[i] = str;
-			break;
-			}
-	}
+	tasks[taskIndex] = t;
+    taskIndex ++;
 }
 
 void Object::addPowerUps( string str)
-
 {
-	for(int i =0; i < 5; i++)
+	for(int i =0; i < 2; i++)
 	{
 			if(powerUps[i] == "")
 			{
 			powerUps[i] = str;
+            if (str=="hammer"){
+                hasHammer=1;
+            }
 			break;
 			}
 	}
 }
 
+bool Object::removePowerUps()
+{
+    bool success = false;
+	for(int i =0; i < 2; i++)
+	{
+            if (powerUps[i] != "") {
+                
+                if (powerUps[i] == "hammer"){
+                    handlePowerUp(0);
+                    usedHammer = 1;
+                }
+                else if (powerUps[i] == "teleporter"){
+                    handlePowerUp(1);
+                    usedTeleport = 1;
+                } else {
+                    handlePowerUp(2);
+                    usedPhone = 1;
+                }
+                powerUps[i] = "";
+                success = true;
+                break;
+            }
+
+	}
+	return success;
+}
+
+void Object::handlePowerUp(int pid){
+    if (pid == 0) {
+    } else if (pid == 1) {}
+    else {
+        for(int i =0; i<5; i++){
+            if (tasks[i]->taskDone == false){
+                tasks[i]->taskDone = true;
+                int j = stoi(taskDone);
+                j++;
+                taskDone = to_string(j);
+                powerupRender = "Phone: A friend did your task for you!";
+                break;
+            }
+        }
+
+    }
+}
 
 string Object::getIElem(string s[],int i)
 {
@@ -684,6 +738,18 @@ void Object::changeFrame(int dir) {
     }
 }
 
+void Object::setx(int x){
+    xpos = x;
+}
+
+void Object::sety(int y){
+    ypos = y;
+}
+
+void Object::setFrame(int f){
+    frame = f;
+}
+
 void Object::toggleYulu(){
     if (Yulu) {
         cout << "Yulu activated!" << endl;
@@ -719,7 +785,12 @@ void Object::objTeleport(int location){
     }
 }
 
-void Object::randomTeleport(int location){
+void Object::randomTeleport(){
+    int min = 0;
+    int max = 8;
+    int range = max-min+1;
+    int location = rand()%range + min;
+    
     switch(location){
         case 0:
             xpos = 4432;
@@ -766,6 +837,7 @@ int Object::getHappyness()
 {
 return happyness;
 }
+
 void Object::updateHappyness()
 {
 int h = std::stoi(hunger);
@@ -776,4 +848,88 @@ if(happyness >180){
 happyness = 180;
 }
 
+}
+
+void Object::collisionNPC(){
+    happyness -= 10;
+}
+
+void Object::collisionChance(){
+    int min = 0;
+    int max = 10;
+    int range = max-min+1;
+    int idx = rand()%range + min;
+
+    int i = 0;
+
+    switch(idx){
+        case 0:
+            chanceRender = "Mystery Box: Happiness increased by 5";
+            happyness += 5;
+            if(happyness >180){
+                happyness = 180;
+            }
+            break;
+        case 1:
+            chanceRender = "Mystery Box: Hunger reduced by 10";
+            i = std::stoi(hunger);
+	        i-=10;
+            if(i<0){
+                i =0;
+            }
+	        hunger = std::to_string(i);
+            break;
+        case 2:
+            chanceRender = "Mystery Box: Received 100 Money";
+            i = std::stoi(money);
+	        i+=100;
+	        money = std::to_string(i);
+            break;
+        case 3:
+            chanceRender = "Mystery Box: Received 200 Money";
+            i = std::stoi(money);
+	        i+=200;
+	        money = std::to_string(i);
+            break;
+        case 4:
+            chanceRender = "Mystery Box: Happiness decreased by 5";
+            happyness += 5;
+            break;
+        case 5:
+            chanceRender = "Mystery Box: Happiness decreased by 5";
+            happyness -= 5;
+            if(happyness < 0){
+                happyness = 0;
+            }
+            break;
+        case 6:
+            chanceRender = "Mystery Box: Teleported to Random Location";
+            randomTeleport();
+            break;
+        case 7:
+            chanceRender = "Mystery Box: Teleported to Jwala";
+            objTeleport(0);
+            break;
+        case 8:
+            chanceRender = "Mystery Box: Teleported to Rajdhani";
+            objTeleport(3);
+            break;
+        case 9:
+            chanceRender = "Mystery Box: Income Tax -100 Money";
+            i = std::stoi(money);
+	        i-=100;
+            if(i<0){
+                i =0;
+            }
+	        money = std::to_string(i);
+            break;
+        case 10:
+            chanceRender = "Mystery Box: Feeling Hungry";        
+            i = std::stoi(hunger);
+	        i+=10;
+	        hunger = std::to_string(i);
+            break;
+        default:
+            break;
+    }
 }

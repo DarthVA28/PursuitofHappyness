@@ -4,6 +4,7 @@
 #include "NPC.hpp"
 #include "PowerUp.hpp"
 #include "Chance.hpp"
+#include "Task.hpp"
 #include <string>
 
 using std::string;
@@ -22,15 +23,22 @@ public:
     void addPowerUps(string str);
     bool removeItems(string str);
     void removeTasks(string str);
-    void removePowerUps(string str);
-    void addTasks(string str);
+    bool removePowerUps();
+    void addTasks(Task* t);
     void changeFrame(int dir);
     void toggleYulu();
     void updateHappyness();
     void objTeleport(int location);
-    void randomTeleport(int location);
+    void randomTeleport();
+    void setx(int x);
+    void sety(int y);
+    void setFrame(int frame);
+    void collisionNPC();
+    void collisionChance();
+    void handlePowerUp(int pid);
 
     bool inMotion;
+    bool profColl;
     bool gotChance;
     bool Yulu;
     bool checkCollision(SDL_Rect b);
@@ -38,7 +46,9 @@ public:
 
     string inventoryItems[5];
     string powerUps[2];
-    string tasks[5];
+    Task* tasks[5];
+    string chanceRender;
+    string powerupRender;
 
     int frame;
     int numInventoryItems;
@@ -49,6 +59,11 @@ public:
     string money ;
     string taskDone ;
     int activePowerUp;
+    int hasHammer;
+    int usedTeleport;
+    int usedHammer;
+    int usedPhone;
+    int taskIndex;
 
     string getIElem(string s[], int i);
     SDL_Rect getCollider();
