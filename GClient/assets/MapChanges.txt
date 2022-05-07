@@ -1,0 +1,7 @@
+Changes to make in Map:
+- Add Jwala Circle 
+- Add Nilgiri + Jwala Yulu Stands
+- Fix Rock Area + Mech Lawn 
+- Colouring touchups 
+- Fine Detailing 
+- Roads add markers
