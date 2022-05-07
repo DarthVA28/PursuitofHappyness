@@ -1,1 +1,5 @@
 1. Tried to implement music but sometimes gives error.
+
+2. Teleporter powerup not working, function has been implemented, were unable to sent coordinates.
+
+3. Hammer not implemented.
